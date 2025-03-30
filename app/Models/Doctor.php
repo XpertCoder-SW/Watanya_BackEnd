@@ -10,6 +10,6 @@ class Doctor extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class, 'doctor_subject');
+        return $this->belongsToMany(Subject::class, 'doctor_id', 'subject_id');
     }
 }

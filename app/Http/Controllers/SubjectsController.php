@@ -6,7 +6,7 @@ use App\Models\Grade;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 
-class SubjectsController 
+class SubjectsController
 {
     // Get All Subject to be shown in the first page of subjects
     public function index()
@@ -19,7 +19,7 @@ class SubjectsController
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'code' => 'required|string|max:255|unique:watnya_subjects,code',
+            'code' => 'required|string|max:255|unique:subjects,code',
             'name' => 'required|string|max:255',
             'creditHours' => 'required|integer|min:1',
             'specialization' => 'required|in:CS,IT',
@@ -42,10 +42,73 @@ class SubjectsController
         ], 201);
     }
 
-       
-    public function updte(Request $request , $id){
 
+    public function update(Request $request, $id)
+    {
+
+        $validated = $request->validate([
+            "code" => "sometimes|string|max:255|unique:subjects,code,$id",
+            "name" => "sometimes|string|max:255",
+            "creditHours" => "sometimes|integre|min:1",
+            "specialization" => "sometimes|in:CS,IT",
+            "level" => "sometimes|in:One,Two,Three,Four",
+            "semester" => "sometimes|in:One,Two",
+        ]);
+
+
+        $updateData = [];
+
+        if (isset($validated['code'])) {
+            $updateData['code'] = $validated['code'];
+        }
+
+        if (isset($validated['name'])) {
+            $updateData['name'] = $validated['name'];
+        }
+
+        if (isset($validated['creditHours'])) {
+            $updateData['creditHours'] = $validated['creditHours'];
+        }
+
+        if (isset($validated['specialization'])) {
+            $updateData['specialization'] = $validated['specialization'];
+        }
+
+        if (isset($validated['level'])) {
+            $updateData['level'] = $validated['level'];
+        }
+
+        if (isset($validated['semester'])) {
+            $updateData['semester'] = $validated['semester'];
+        }
+
+
+        if (empty($updateData)) {
+            return response()->json([
+                "message" => "At least one field must be provided to update the subject."
+            ], 422);
+        }
+
+
+        $subject = Subject::where("id", "$id")->update($updateData);
+
+
+        if (!$subject) {
+            return response()->json([
+                "message" => "Subject not found."
+            ], 404);
+        }
+
+
+        $updatedSubject = Subject::find($id);
+
+
+        return response()->json([
+            "message" => "Subject Updated Successfully",
+            "subject" => $updatedSubject,
+        ], 201);
     }
+
 
 
 

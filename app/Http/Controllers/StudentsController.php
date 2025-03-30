@@ -57,6 +57,64 @@ class StudentsController
 
 
     public function update(Request $request , $id){
+              
+        $validated = $request->validate([
+            "code"=>"sometimes|string|unique:students,code,{$id}",
+            "name"=>"sometimes|string|max:255",
+            "email"=>"sometimes|string|unique:students,email,{$id}",
+            "phoneNumber"=>"sometimes|string|max:255",
+            "level"=>"sometimes|in:One,Two,Three,Four",
+            'specialization' => 'required|in:CS,IT',
+
+        ]);
+
+        $updatData = [] ; 
+          if(isset($validated['code'])){
+            $updatData['code']  =$validated['code'];
+          }
+
+          if(isset($validated['name'])){
+            $updatData['name'] = $validated['name'];
+          }
+
+          if(isset($validated['email'])){
+            $updatData['email'] = $validated['email'];
+          }
+
+          if(isset($validated['phoneNumber'])){
+            $updatData['phoneNumber'] = $validated['phoneNumber'];
+          }
+
+          if(isset($validated['level'])){
+            $updatData['level'] = $validated['level'];
+          }
+
+          if(isset($validated['specialization'])){
+            $updatData['specialization'] = $validated['specialization'];
+          }
+
+          if(empty($updatData)){
+            return response()->json([
+                'message' => 'At least one field must be provided to update the doctor.'
+            ], 422);
+          }
+
+          $updated = Student::where("id","$id")->update($updatData);
+          if (!$updated) {
+            return response()->json([
+                'message' => 'Student not found.'
+            ], 404);
+         }
+
+         $updatedStudent = Student::find($id);
+
+        
+         return response()->json([
+             'message' => 'Student updated successfully',
+             'student' => $updatedStudent,
+         ], 200);
+
+
 
     }
 }
