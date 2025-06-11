@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->enum('level', ['One', 'Two', 'Three', 'Four']);
             $table->enum('specialization', ['CS', 'IT']);
-            $table->string('Academic-Year');
+            $table->string('academic_year')->nullable();
             $table->decimal('gpa', 3, 2);
             $table->timestamps();
         });

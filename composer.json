@@ -13,7 +13,9 @@
         "darkaonline/l5-swagger": "^9.0",
         "firebase/php-jwt": "^6.11",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.10.1",
+        "zircote/swagger-php": "^5.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -55,7 +57,8 @@
         "dev": [
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" --names='server,queue,vite'"
-        ]
+        ],
+        "generate-openapi": "./vendor/bin/openapi --output ./public/openapi.yaml ./app/Http/Controllers"
     },
     "extra": {
         "branch-alias": {

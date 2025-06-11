@@ -5,119 +5,44 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => 'Swagger UI',
             ],
 
             'routes' => [
-                /*
-                 * Route for accessing api documentation interface
-                 */
+
                 'api' => 'api/documentation',
+                'docs' => 'docs',
             ],
+
             'paths' => [
-                /*
-                 * Edit to include full URL in ui for assets
-                 */
-                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
-
-                /*
-                * Edit to set path where swagger ui assets should be stored
-                */
-                'swagger_ui_assets_path' => env('L5_SWAGGER_UI_ASSETS_PATH', 'vendor/swagger-api/swagger-ui/dist/'),
-
-                /*
-                 * File name of the generated json documentation file
-                 */
-                'docs_json' => 'api-docs.json',
-
-                /*
-                 * File name of the generated YAML documentation file
-                 */
-                'docs_yaml' => 'api-docs.yaml',
-
-                /*
-                 * Set this to `json` or `yaml` to determine which documentation file to use in UI
-                 */
-                'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
-
-                /*
-                 * Absolute paths to directory containing the swagger annotations are stored.
-                 */
-                'annotations' => [
-                    base_path('app'),
-                ],
-            ],
+            'annotations' => base_path('app'), // المسار الذي يحتوي على التعليقات التوضيحية (Annotations)
+            'docs' => storage_path('api-docs'), // المسار الذي سيتم حفظ ملف api-docs.json فيه
+            'views' => base_path('resources/views/vendor/l5-swagger'), // مسار views
+            'base' => base_path('routes/api.php'), // المسار الأساسي لملف routes
+            'excludes' => [], // المسارات التي تريد استبعادها
+            'docs_json' => 'api-docs.json', // اسم ملف api-docs.json
+],
         ],
     ],
+
     'defaults' => [
         'routes' => [
-            /*
-             * Route for accessing parsed swagger annotations.
-             */
+            'api' => 'api/documentation',
             'docs' => 'docs',
-
-            /*
-             * Route for Oauth2 authentication callback.
-             */
             'oauth2_callback' => 'api/oauth2-callback',
-
-            /*
-             * Middleware allows to prevent unexpected access to API documentation
-             */
             'middleware' => [
                 'api' => [],
                 'asset' => [],
                 'docs' => [],
                 'oauth2_callback' => [],
             ],
-
-            /*
-             * Route Group options
-             */
             'group_options' => [],
         ],
 
-        'paths' => [
-            /*
-             * Absolute path to location where parsed annotations will be stored
-             */
-            'docs' => storage_path('api-docs'),
-
-            /*
-             * Absolute path to directory where to export views
-             */
-            'views' => base_path('resources/views/vendor/l5-swagger'),
-
-            /*
-             * Edit to set the api's base path
-             */
-            'base' => env('L5_SWAGGER_BASE_PATH', null),
-
-            /*
-             * Absolute path to directories that should be excluded from scanning
-             * @deprecated Please use `scanOptions.exclude`
-             * `scanOptions.exclude` overwrites this
-             */
-            'excludes' => [],
-        ],
+        'servers' => [], // إزالة قسم Servers
 
         'scanOptions' => [
-            /**
-             * Configuration for default processors. Allows to pass processors configuration to swagger-php.
-             *
-             * @link https://zircote.github.io/swagger-php/reference/processors.html
-             */
             'default_processors_configuration' => [
-            /** Example */
-            /**
-             * 'operationId.hash' => true,
-             * 'pathFilter' => [
-             * 'tags' => [
-             * '/pets/',
-             * '/store/',
-             * ],
-             * ],.
-             */
             ],
 
             /**
@@ -167,7 +92,7 @@ return [
 
         /*
          * API security definitions. Will be generated into documentation file.
-        */
+         */
         'securityDefinitions' => [
             'securitySchemes' => [
                 /*
@@ -254,7 +179,7 @@ return [
          * Configs plugin allows to fetch external configs instead of passing them to SwaggerUIBundle.
          * See more at: https://github.com/swagger-api/swagger-ui#configs-plugin
          */
-        'additional_config_url' => null,
+        'additional_config_url' => null, // إزالة الرابط
 
         /*
          * Apply a sort to the operation list of each API. It can be 'alpha' (sort by paths alphanumerically),
@@ -275,24 +200,10 @@ return [
         'ui' => [
             'display' => [
                 'dark_mode' => env('L5_SWAGGER_UI_DARK_MODE', false),
-                /*
-                 * Controls the default expansion setting for the operations and tags. It can be :
-                 * 'list' (expands only the tags),
-                 * 'full' (expands the tags and operations),
-                 * 'none' (expands nothing).
-                 */
                 'doc_expansion' => env('L5_SWAGGER_UI_DOC_EXPANSION', 'none'),
-
-                /**
-                 * If set, enables filtering. The top bar will show an edit box that
-                 * you can use to filter the tagged operations that are shown. Can be
-                 * Boolean to enable or disable, or a string, in which case filtering
-                 * will be enabled using that string as the filter expression. Filtering
-                 * is case-sensitive matching the filter expression anywhere inside
-                 * the tag.
-                 */
-                'filter' => env('L5_SWAGGER_UI_FILTERS', true), // true | false
+                'filter' => env('L5_SWAGGER_UI_FILTERS', false), // true | false
             ],
+            
 
             'authorization' => [
                 /*
@@ -308,6 +219,7 @@ return [
                 ],
             ],
         ],
+
         /*
          * Constants which can be used in annotations
          */

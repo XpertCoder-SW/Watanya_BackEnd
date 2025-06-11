@@ -9,7 +9,8 @@ class Doctor extends Model
     protected $fillable = ['name', 'phoneNumber', 'email', 'password', 'code'];
 
     public function subjects()
-    {
-        return $this->belongsToMany(Subject::class, 'doctor_subject');
-    }
+{
+    return $this->belongsToMany(Subject::class, 'doctor_subject', 'doctor_id', 'subject_id');
+}
+
 }

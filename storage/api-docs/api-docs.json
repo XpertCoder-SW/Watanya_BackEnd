@@ -1,0 +1,3232 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Watanya APIs",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/setting": {
+            "get": {
+                "tags": ["Setting"],
+                "summary": "Get system setting",
+                "description": "Retrieve all system setting including id, showGrades, academic_year, and current_semester.",
+                "operationId": "cc60c14007fc0bf895dcbe7101089cd0",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "showGrades": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "academic_year": {
+                                            "type": "string",
+                                            "example": "2023-2024"
+                                        },
+                                        "current_semester": {
+                                            "type": "string",
+                                            "example": "One"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No system setting found"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Setting"],
+                "summary": "Create new system setting",
+                "description": "Create new system setting with showGrades, academic_year, and current_semester.",
+                "operationId": "21e9374f9a24cd0441abeaaafd15b07b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "showGrades",
+                                    "academic_year",
+                                    "current_semester"
+                                ],
+                                "properties": {
+                                    "showGrades": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "academic_year": {
+                                        "type": "string",
+                                        "example": "2023-2024"
+                                    },
+                                    "current_semester": {
+                                        "type": "string",
+                                        "example": "One"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "System setting created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "showGrades": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "academic_year": {
+                                                    "type": "string",
+                                                    "example": "2023-2024"
+                                                },
+                                                "current_semester": {
+                                                    "type": "string",
+                                                    "example": "One"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/setting/{id}": {
+            "put": {
+                "tags": ["Setting"],
+                "summary": "Update system setting",
+                "description": "Update existing system setting by ID.",
+                "operationId": "d51ed5b3e58ccb66e5b42c8762fe05c2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the setting to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "showGrades",
+                                    "academic_year",
+                                    "current_semester"
+                                ],
+                                "properties": {
+                                    "showGrades": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "academic_year": {
+                                        "type": "string",
+                                        "example": "2023-2024"
+                                    },
+                                    "current_semester": {
+                                        "type": "string",
+                                        "example": "One"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "System setting updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "System setting updated successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "showGrades": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "academic_year": {
+                                                    "type": "string",
+                                                    "example": "2023-2024"
+                                                },
+                                                "current_semester": {
+                                                    "type": "string",
+                                                    "example": "One"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "System settings not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Setting"],
+                "summary": "Delete system setting",
+                "description": "Delete a system setting by its ID.",
+                "operationId": "c032155900a017f3d2e58823a1cacec7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the setting to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "System setting deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Admin setting deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "System setting not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Admin setting not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": ["Authentication"],
+                "summary": "Login user",
+                "description": "Authenticate user and return JWT token",
+                "operationId": "a11c4f1eecb542274aa97927040c02e7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": ["code", "password"],
+                                "properties": {
+                                    "code": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login successful"
+                                        },
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/api/admin/doctors": {
+            "get": {
+                "tags": ["Admin Doctors"],
+                "summary": "Get paginated list of doctors",
+                "description": "Returns a paginated list of doctors with their subjects",
+                "operationId": "c447c2efb4e9f89a4bd2abbd2ab05586",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search term for doctor name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Search term for doctor code",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "total_pages": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "doctors": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Dr. Ahmed Mohamed"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "ahmed@example.com"
+                                                    },
+                                                    "phoneNumber": {
+                                                        "type": "string",
+                                                        "example": "+201234567890"
+                                                    },
+                                                    "code": {
+                                                        "type": "string",
+                                                        "example": "DOC123"
+                                                    },
+                                                    "subjects": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "name": {
+                                                                    "type": "string",
+                                                                    "example": "Anatomy"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Admin Doctors"],
+                "summary": "Create a new doctor",
+                "description": "Create a new doctor with the specified data",
+                "operationId": "281e85246564e6e8561f260b1b54ae71",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "phoneNumber",
+                                    "subject_ids",
+                                    "code",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Dr. Ahmed Mohamed"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "ahmed@example.com"
+                                    },
+                                    "phoneNumber": {
+                                        "type": "string",
+                                        "example": "+201234567890"
+                                    },
+                                    "subject_ids": {
+                                        "description": "Array of subject IDs",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "DOC123"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Doctor created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "doctor": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Dr. Ahmed Mohamed"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "ahmed@example.com"
+                                                },
+                                                "phoneNumber": {
+                                                    "type": "string",
+                                                    "example": "+201234567890"
+                                                },
+                                                "code": {
+                                                    "type": "string",
+                                                    "example": "DOC123"
+                                                },
+                                                "subjects": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Anatomy"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/admin/doctors/{id}": {
+            "get": {
+                "tags": ["Admin Doctors"],
+                "summary": "Get doctor by ID",
+                "description": "Retrieve a single doctor by their ID",
+                "operationId": "170aabc437d4c5071d0bc3816ee9670b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the doctor",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Dr. Ahmed Mohamed"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "ahmed@example.com"
+                                        },
+                                        "phoneNumber": {
+                                            "type": "string",
+                                            "example": "+201234567890"
+                                        },
+                                        "code": {
+                                            "type": "string",
+                                            "example": "DOC123"
+                                        },
+                                        "subjects": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Anatomy"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Doctor not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Doctor not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Admin Doctors"],
+                "summary": "Update a doctor",
+                "description": "Update an existing doctor's data. Password is optional - if not provided, the existing password will be kept.",
+                "operationId": "c20bf5df2270281028e59cfa1642385a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the doctor to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Dr. Ahmed Mohamed Updated"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "ahmed.updated@example.com"
+                                    },
+                                    "phoneNumber": {
+                                        "type": "string",
+                                        "example": "+201234567891"
+                                    },
+                                    "subject_ids": {
+                                        "description": "Array of subject IDs",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 2
+                                        }
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "DOC124"
+                                    },
+                                    "password": {
+                                        "description": "Optional - if not provided, existing password will be kept",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    },
+                                    "password_confirmation": {
+                                        "description": "Required only if password is provided",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Doctor updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "doctor": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Dr. Ahmed Mohamed Updated"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "ahmed.updated@example.com"
+                                                },
+                                                "phoneNumber": {
+                                                    "type": "string",
+                                                    "example": "+201234567891"
+                                                },
+                                                "code": {
+                                                    "type": "string",
+                                                    "example": "DOC124"
+                                                },
+                                                "subjects": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 2
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Physiology"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Doctor not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Doctor not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "password": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The password confirmation does not match."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Admin Doctors"],
+                "summary": "Delete a doctor",
+                "description": "Delete a doctor by ID",
+                "operationId": "d73be1c4a64227c4849771494dc942be",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the doctor to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Doctor deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Doctor deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Doctor not found"
+                    }
+                }
+            }
+        },
+        "/api/student/{student_id}/grades": {
+            "post": {
+                "tags": ["Doctor Student"],
+                "summary": "Add student grades",
+                "description": "Store student grade information in grades table for specific subject",
+                "operationId": "c4d7c45831eca8cb2089baa408873e6b",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "subject_id",
+                                    "midtermGrade",
+                                    "practicalGrade",
+                                    "yearsWorkGrade",
+                                    "finalGrade",
+                                    "gradeStatus"
+                                ],
+                                "properties": {
+                                    "subject_id": {
+                                        "description": "Subject ID",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "midtermGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "maximum": 100,
+                                        "minimum": 0,
+                                        "example": 25
+                                    },
+                                    "practicalGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "maximum": 100,
+                                        "minimum": 0,
+                                        "example": 15
+                                    },
+                                    "yearsWorkGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "maximum": 100,
+                                        "minimum": 0,
+                                        "example": 20
+                                    },
+                                    "finalGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "maximum": 100,
+                                        "minimum": 0,
+                                        "example": 40
+                                    },
+                                    "gradeStatus": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pass",
+                                            "i",
+                                            "i*",
+                                            "ff*",
+                                            "others"
+                                        ],
+                                        "example": "pass"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Grade created successfully in grades table",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "grade": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "student_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "subject_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "totalGrade": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 100
+                                                },
+                                                "totalGradeChar": {
+                                                    "type": "string",
+                                                    "example": "A"
+                                                },
+                                                "midtermGrade": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 25
+                                                },
+                                                "practicalGrade": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 15
+                                                },
+                                                "yearsWorkGrade": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 20
+                                                },
+                                                "finalGrade": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 40
+                                                },
+                                                "gradeStatus": {
+                                                    "type": "string",
+                                                    "example": "pass"
+                                                },
+                                                "academic_year": {
+                                                    "type": "string",
+                                                    "example": "2023-2024"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict - Grade already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grade already exists for this student in the specified subject"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "subject_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "This student already has a grade record for this subject"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "subject_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The selected subject_id is invalid."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student or subject not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/student/{student_id}/grades/{subject_id}": {
+            "get": {
+                "tags": ["Doctor Student"],
+                "summary": "Get student grade for a subject",
+                "description": "Retrieve a student's grade record for a specific subject",
+                "operationId": "56262136a6e94ae820f77aefc8077173",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "subject_id",
+                        "in": "path",
+                        "description": "ID of the subject",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Grade retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "grade": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grade not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Doctor Student"],
+                "summary": "Update student grade for a subject",
+                "description": "Update a student's grade record for a specific subject",
+                "operationId": "94a2c5bafefdbaa0d24f6290cffe9d95",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "subject_id",
+                        "in": "path",
+                        "description": "ID of the subject",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "midtermGrade",
+                                    "practicalGrade",
+                                    "yearsWorkGrade",
+                                    "finalGrade",
+                                    "gradeStatus"
+                                ],
+                                "properties": {
+                                    "midtermGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "maximum": 100,
+                                        "minimum": 0,
+                                        "example": 25
+                                    },
+                                    "practicalGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "maximum": 100,
+                                        "minimum": 0,
+                                        "example": 15
+                                    },
+                                    "yearsWorkGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "maximum": 100,
+                                        "minimum": 0,
+                                        "example": 20
+                                    },
+                                    "finalGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "maximum": 100,
+                                        "minimum": 0,
+                                        "example": 40
+                                    },
+                                    "gradeStatus": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pass",
+                                            "i",
+                                            "i*",
+                                            "ff*",
+                                            "others"
+                                        ],
+                                        "example": "pass"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Grade updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "grade": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grade not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/student/{student_id}/grades-gpa": {
+            "get": {
+                "tags": ["Student"],
+                "summary": "Get grades for a student for the current academic year and semester",
+                "description": "Returns only the grades for the academic year and semester specified in the Admin table, and only for subjects that belong to that semester. For example, if the Admin table is set to Semester 2, only grades for subjects in Semester 2 will be shown. If showGrades in Admin is false, returns an empty array and GPA/CGPA = 0.",
+                "operationId": "ef4ad3a959e86150f2c9ac02ea9d7f3f",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Grades, GPA, and CGPA retrieved successfully. If showGrades is false, grades will be an empty array and GPA/CGPA will be 0.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "grades": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "subject_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "subject_name": {
+                                                        "type": "string",
+                                                        "example": "Mathematics"
+                                                    },
+                                                    "credit_hours": {
+                                                        "type": "integer",
+                                                        "example": 3
+                                                    },
+                                                    "totalGrade": {
+                                                        "type": "number"
+                                                    },
+                                                    "totalGradeChar": {
+                                                        "type": "string"
+                                                    },
+                                                    "midtermGrade": {
+                                                        "type": "number"
+                                                    },
+                                                    "practicalGrade": {
+                                                        "type": "number"
+                                                    },
+                                                    "yearsWorkGrade": {
+                                                        "type": "number"
+                                                    },
+                                                    "finalGrade": {
+                                                        "type": "number"
+                                                    },
+                                                    "gradeStatus": {
+                                                        "type": "string"
+                                                    },
+                                                    "academic_year": {
+                                                        "type": "string"
+                                                    },
+                                                    "current_semester": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "gpa": {
+                                            "type": "number",
+                                            "format": "float"
+                                        },
+                                        "cgpa": {
+                                            "type": "number",
+                                            "format": "float"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/students": {
+            "get": {
+                "tags": ["Admin Students"],
+                "summary": "Get paginated list of students",
+                "description": "Returns paginated list of students with optional filtering and search",
+                "operationId": "getStudentsList",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search by student code",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "level",
+                        "in": "query",
+                        "description": "Filter by level",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "specialization",
+                        "in": "query",
+                        "description": "Filter by specialization",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "academic_year",
+                        "in": "query",
+                        "description": "Filter by academic year",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "total_pages": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "students": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "code": {
+                                                        "type": "string",
+                                                        "example": "ST2023001"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "john@example.com"
+                                                    },
+                                                    "phoneNumber": {
+                                                        "type": "string",
+                                                        "example": "+1234567890"
+                                                    },
+                                                    "level": {
+                                                        "type": "string",
+                                                        "example": "One"
+                                                    },
+                                                    "specialization": {
+                                                        "type": "string",
+                                                        "example": "CS"
+                                                    },
+                                                    "academic_year": {
+                                                        "type": "string",
+                                                        "example": "2023-2024"
+                                                    },
+                                                    "gpa": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 3.5
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Admin Students"],
+                "summary": "Create a new student",
+                "description": "Creates a new student record",
+                "operationId": "createStudent",
+                "requestBody": {
+                    "description": "Student data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code",
+                                    "name",
+                                    "email",
+                                    "phoneNumber",
+                                    "level",
+                                    "specialization"
+                                ],
+                                "properties": {
+                                    "code": {
+                                        "type": "string",
+                                        "example": "ST2023001"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "phoneNumber": {
+                                        "type": "string",
+                                        "example": "+1234567890"
+                                    },
+                                    "level": {
+                                        "type": "string",
+                                        "enum": ["One", "Two", "Three", "Four"],
+                                        "example": "One"
+                                    },
+                                    "specialization": {
+                                        "type": "string",
+                                        "enum": ["CS", "IT"],
+                                        "example": "CS"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Student created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student added successfully"
+                                        },
+                                        "student": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "code": {
+                                                    "type": "string",
+                                                    "example": "ST2023001"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "john@example.com"
+                                                },
+                                                "phoneNumber": {
+                                                    "type": "string",
+                                                    "example": "+1234567890"
+                                                },
+                                                "level": {
+                                                    "type": "string",
+                                                    "example": "One"
+                                                },
+                                                "specialization": {
+                                                    "type": "string",
+                                                    "example": "CS"
+                                                },
+                                                "Academic-Year": {
+                                                    "type": "string",
+                                                    "example": "2023-2024"
+                                                },
+                                                "gpa": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 0
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "field_name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The field_name field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/students/{id}": {
+            "get": {
+                "tags": ["Admin Students"],
+                "summary": "Get student by ID",
+                "description": "Retrieve a single student by their ID",
+                "operationId": "ff9d7c17e8bb7b68aebc7c24d52b8ba6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Mohamed Ahmed"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "mohamed@example.com"
+                                        },
+                                        "phoneNumber": {
+                                            "type": "string",
+                                            "example": "+201234567890"
+                                        },
+                                        "code": {
+                                            "type": "string",
+                                            "example": "STU123"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Admin Students"],
+                "summary": "Update a student",
+                "description": "Updates an existing student record",
+                "operationId": "updateStudent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Student ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Student data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "code": {
+                                        "type": "string",
+                                        "example": "ST2023001"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe Updated"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.updated@example.com"
+                                    },
+                                    "phoneNumber": {
+                                        "type": "string",
+                                        "example": "+9876543210"
+                                    },
+                                    "level": {
+                                        "type": "string",
+                                        "enum": ["One", "Two", "Three", "Four"],
+                                        "example": "Two"
+                                    },
+                                    "specialization": {
+                                        "type": "string",
+                                        "enum": ["CS", "IT"],
+                                        "example": "IT"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Student updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student updated successfully"
+                                        },
+                                        "student": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "code": {
+                                                    "type": "string",
+                                                    "example": "ST2023001"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe Updated"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "john.updated@example.com"
+                                                },
+                                                "phoneNumber": {
+                                                    "type": "string",
+                                                    "example": "+9876543210"
+                                                },
+                                                "level": {
+                                                    "type": "string",
+                                                    "example": "Two"
+                                                },
+                                                "specialization": {
+                                                    "type": "string",
+                                                    "example": "IT"
+                                                },
+                                                "academic_year": {
+                                                    "type": "string",
+                                                    "example": "2023-2024"
+                                                },
+                                                "gpa": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 0
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "field_name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The field_name field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Admin Students"],
+                "summary": "Delete a student",
+                "description": "Deletes a student record by ID",
+                "operationId": "deleteStudent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Student ID to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Student deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/students/{student_id}/examination-results": {
+            "get": {
+                "tags": ["Student Grades"],
+                "summary": "Get examination results for a student",
+                "description": "Retrieve student details and examination results for all semesters.",
+                "operationId": "9b4040ba76478dc03b374a2a43c845cd",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Examination results retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "student": {
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string",
+                                                    "example": "11703427"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Ibrahim Hesham Ibrahim"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "ibrahim@gmail.com"
+                                                },
+                                                "phoneNumber": {
+                                                    "type": "string",
+                                                    "example": "+20123456789"
+                                                },
+                                                "specialization": {
+                                                    "type": "string",
+                                                    "example": "IT"
+                                                },
+                                                "CGPA": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 3.3
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "semesters": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "semester": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "subjects": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "subjectTitle": {
+                                                                    "type": "string",
+                                                                    "example": "Databases"
+                                                                },
+                                                                "grade": {
+                                                                    "type": "string",
+                                                                    "example": "A"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "GPA": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 3.1
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/subjects": {
+            "get": {
+                "tags": ["Admin Subjects"],
+                "summary": "Get paginated list of subjects with filtering and search",
+                "description": "Returns a paginated list of all subjects with filtering by specialization, level, and search by subject code",
+                "operationId": "e2df65e104bdb54572606e9d6a17ff0d",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "specialization",
+                        "in": "query",
+                        "description": "Filter by specialization (CS, IT)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["CS", "IT"]
+                        }
+                    },
+                    {
+                        "name": "level",
+                        "in": "query",
+                        "description": "Filter by level (One, Two, Three, Four)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["One", "Two", "Three", "Four"]
+                        }
+                    },
+                    {
+                        "name": "semester",
+                        "in": "query",
+                        "description": "Filter by semester (One, Two)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["One", "Two"]
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search by subject code",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "total_pages": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "total_items": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "subjects": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "code": {
+                                                        "type": "string",
+                                                        "example": "CS101"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Introduction to Computer Science"
+                                                    },
+                                                    "creditHours": {
+                                                        "type": "integer",
+                                                        "example": 3
+                                                    },
+                                                    "specialization": {
+                                                        "type": "string",
+                                                        "enum": ["CS", "IT"],
+                                                        "example": "CS"
+                                                    },
+                                                    "level": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "One",
+                                                            "Two",
+                                                            "Three",
+                                                            "Four"
+                                                        ],
+                                                        "example": "One"
+                                                    },
+                                                    "semester": {
+                                                        "type": "string",
+                                                        "enum": ["One", "Two"],
+                                                        "example": "One"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Admin Subjects"],
+                "summary": "Create a new subject",
+                "description": "Create a new subject with the specified data",
+                "operationId": "e659949a1ea700ba825eb898475494fc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code",
+                                    "name",
+                                    "creditHours",
+                                    "specialization",
+                                    "level",
+                                    "semester"
+                                ],
+                                "properties": {
+                                    "code": {
+                                        "type": "string",
+                                        "example": "CS101"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Introduction to Computer Science"
+                                    },
+                                    "creditHours": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "specialization": {
+                                        "type": "string",
+                                        "enum": ["CS", "IT"],
+                                        "example": "CS"
+                                    },
+                                    "level": {
+                                        "type": "string",
+                                        "enum": ["One", "Two", "Three", "Four"],
+                                        "example": "One"
+                                    },
+                                    "semester": {
+                                        "type": "string",
+                                        "enum": ["One", "Two"],
+                                        "example": "One"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Subject created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "subject": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "code": {
+                                                    "type": "string",
+                                                    "example": "CS101"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Introduction to Computer Science"
+                                                },
+                                                "creditHours": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "specialization": {
+                                                    "type": "string",
+                                                    "example": "CS"
+                                                },
+                                                "level": {
+                                                    "type": "string",
+                                                    "example": "One"
+                                                },
+                                                "semester": {
+                                                    "type": "string",
+                                                    "example": "One"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/admin/subjects/{id}": {
+            "get": {
+                "tags": ["Admin Subjects"],
+                "summary": "Get subject by ID",
+                "description": "Retrieve a single subject by its ID",
+                "operationId": "34864a2c9f1e4f7c1894d92a3758813c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the subject",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "code": {
+                                            "type": "string",
+                                            "example": "CS101"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Introduction to Computer Science"
+                                        },
+                                        "creditHours": {
+                                            "type": "integer",
+                                            "example": 3
+                                        },
+                                        "specialization": {
+                                            "type": "string",
+                                            "enum": ["CS", "IT"],
+                                            "example": "CS"
+                                        },
+                                        "level": {
+                                            "type": "string",
+                                            "enum": [
+                                                "One",
+                                                "Two",
+                                                "Three",
+                                                "Four"
+                                            ],
+                                            "example": "One"
+                                        },
+                                        "semester": {
+                                            "type": "string",
+                                            "enum": ["One", "Two"],
+                                            "example": "One"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subject not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subject not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Admin Subjects"],
+                "summary": "Update a subject",
+                "description": "Update an existing subject's data",
+                "operationId": "b08252cd001efecb11da22e94ea6a1de",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the subject to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "code",
+                                    "name",
+                                    "creditHours",
+                                    "specialization",
+                                    "level",
+                                    "semester"
+                                ],
+                                "properties": {
+                                    "code": {
+                                        "type": "string",
+                                        "example": "CS101"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Introduction to Computer Science (Updated)"
+                                    },
+                                    "creditHours": {
+                                        "type": "integer",
+                                        "example": 4
+                                    },
+                                    "specialization": {
+                                        "type": "string",
+                                        "enum": ["CS", "IT"],
+                                        "example": "CS"
+                                    },
+                                    "level": {
+                                        "type": "string",
+                                        "enum": ["One", "Two", "Three", "Four"],
+                                        "example": "Two"
+                                    },
+                                    "semester": {
+                                        "type": "string",
+                                        "enum": ["One", "Two"],
+                                        "example": "Two"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Subject updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "subject": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "code": {
+                                                    "type": "string",
+                                                    "example": "CS101"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Introduction to Computer Science (Updated)"
+                                                },
+                                                "creditHours": {
+                                                    "type": "integer",
+                                                    "example": 4
+                                                },
+                                                "specialization": {
+                                                    "type": "string",
+                                                    "example": "CS"
+                                                },
+                                                "level": {
+                                                    "type": "string",
+                                                    "example": "Two"
+                                                },
+                                                "semester": {
+                                                    "type": "string",
+                                                    "example": "Two"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subject not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Admin Subjects"],
+                "summary": "Delete a subject",
+                "description": "Delete a subject by its ID",
+                "operationId": "91bd1b109ab39b34cef9368524bb4c96",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the subject to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Subject deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subject deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subject not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subject not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/doctor/{doctor_id}/subjects": {
+            "get": {
+                "tags": ["Doctor Subject"],
+                "summary": "Get all subjects for specific doctor (filtered by semesters in admin table)",
+                "description": "Returns paginated data for doctor's subjects with filtering and search. Only subjects in semesters that exist in the admin table will be returned.",
+                "operationId": "354b871314432d93388d2421bc6950df",
+                "parameters": [
+                    {
+                        "name": "doctor_id",
+                        "in": "path",
+                        "description": "ID of the doctor",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "specialization",
+                        "in": "query",
+                        "description": "Filter by specialization (CS, IT)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["CS", "IT"]
+                        }
+                    },
+                    {
+                        "name": "level",
+                        "in": "query",
+                        "description": "Filter by level (One, Two, Three, Four)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["One", "Two", "Three", "Four"]
+                        }
+                    },
+                    {
+                        "name": "semester",
+                        "in": "query",
+                        "description": "Filter by semester (One, Two)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["One", "Two"]
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search by subject code",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "total_pages": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "total_items": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "subjects": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "code": {
+                                                        "type": "string",
+                                                        "example": "CS101"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Introduction to Computer Science"
+                                                    },
+                                                    "creditHours": {
+                                                        "type": "integer",
+                                                        "example": 3
+                                                    },
+                                                    "specialization": {
+                                                        "type": "string",
+                                                        "enum": ["CS", "IT"],
+                                                        "example": "CS"
+                                                    },
+                                                    "level": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "One",
+                                                            "Two",
+                                                            "Three",
+                                                            "Four"
+                                                        ],
+                                                        "example": "One"
+                                                    },
+                                                    "semester": {
+                                                        "type": "string",
+                                                        "enum": ["One", "Two"],
+                                                        "example": "One"
+                                                    },
+                                                    "totalGrade": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 100
+                                                    },
+                                                    "yearsWorkGrade": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 20
+                                                    },
+                                                    "midtermGrade": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 20
+                                                    },
+                                                    "finalGrade": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 50
+                                                    },
+                                                    "practicalGrade": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 10
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Doctor not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Doctor not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/doctor/subject/{subject_id}": {
+            "put": {
+                "tags": ["Doctor Subject"],
+                "summary": "Update subject grades by doctor",
+                "description": "Update grading parameters for a subject (only accessible by doctors)",
+                "operationId": "2f6833a1705d2ab22179304d1823e607",
+                "parameters": [
+                    {
+                        "name": "subject_id",
+                        "in": "path",
+                        "description": "ID of the subject to update grades for",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "totalGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 100
+                                    },
+                                    "yearsWorkGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 20
+                                    },
+                                    "midtermGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 20
+                                    },
+                                    "finalGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 50
+                                    },
+                                    "practicalGrade": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Subject grades updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "subject": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "totalGrade": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 100
+                                                },
+                                                "yearsWorkGrade": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 20
+                                                },
+                                                "midtermGrade": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 20
+                                                },
+                                                "finalGrade": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 50
+                                                },
+                                                "practicalGrade": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 10
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subject not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subject not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/doctor/{doctor_id}/assigned-students": {
+            "get": {
+                "tags": ["Doctor Student"],
+                "summary": "Get students registered in subjects assigned to a doctor (by level)",
+                "description": "Returns a list of students for each subject assigned to the doctor, where students are matched by level.",
+                "operationId": "ba5c3973e3b27279952370edcd966a14",
+                "parameters": [
+                    {
+                        "name": "doctor_id",
+                        "in": "path",
+                        "description": "ID of the doctor",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of students grouped by subject",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "subjects": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "subject_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "subject_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "students": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "code": {
+                                                                    "type": "string"
+                                                                },
+                                                                "name": {
+                                                                    "type": "string"
+                                                                },
+                                                                "email": {
+                                                                    "type": "string"
+                                                                },
+                                                                "phoneNumber": {
+                                                                    "type": "string"
+                                                                },
+                                                                "level": {
+                                                                    "type": "string"
+                                                                },
+                                                                "specialization": {
+                                                                    "type": "string"
+                                                                },
+                                                                "academic_year": {
+                                                                    "type": "string"
+                                                                },
+                                                                "gpa": {
+                                                                    "type": "number",
+                                                                    "format": "float"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No subjects assigned to this doctor or doctor not found"
+                    }
+                }
+            }
+        },
+        "/api/subject/{subject_id}/statistics": {
+            "get": {
+                "tags": ["Subject"],
+                "summary": "Get statistics for a subject by ID",
+                "description": "Retrieve statistics for a subject including grade distribution, pass/fail counts, and student details.",
+                "operationId": "6aa7d5bd13263b9f909fd9944e565353",
+                "parameters": [
+                    {
+                        "name": "subject_id",
+                        "in": "path",
+                        "description": "ID of the subject",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Statistics retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "gradeDistribution": {
+                                            "properties": {
+                                                "A": {
+                                                    "type": "integer"
+                                                },
+                                                "B+": {
+                                                    "type": "integer"
+                                                },
+                                                "B": {
+                                                    "type": "integer"
+                                                },
+                                                "C+": {
+                                                    "type": "integer"
+                                                },
+                                                "C": {
+                                                    "type": "integer"
+                                                },
+                                                "F": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "passFailCounts": {
+                                            "properties": {
+                                                "pass": {
+                                                    "type": "integer"
+                                                },
+                                                "fail": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "specialGradeStatusCounts": {
+                                            "properties": {
+                                                "ff*": {
+                                                    "type": "integer"
+                                                },
+                                                "i*": {
+                                                    "type": "integer"
+                                                },
+                                                "i": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "students": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "code": {
+                                                        "type": "string"
+                                                    },
+                                                    "totalGradeChar": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subject not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subject not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/student/{student_id}/details": {
+            "get": {
+                "tags": ["Student"],
+                "summary": "Get detailed information for a student",
+                "description": "Retrieve student information including personal details, total grade character for each subject, GPA for the current semester, and grades for all levels and academic years.",
+                "operationId": "ffeaa496714e607dee8190073ce476c9",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Student details retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "student": {
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "phoneNumber": {
+                                                    "type": "string"
+                                                },
+                                                "specialization": {
+                                                    "type": "string"
+                                                },
+                                                "CGPA": {
+                                                    "type": "number",
+                                                    "format": "float"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "subjects": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "subject_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "totalGradeChar": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "semesterGPA": {
+                                            "type": "number",
+                                            "format": "float"
+                                        },
+                                        "grades": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "level": {
+                                                        "type": "string"
+                                                    },
+                                                    "academic_year": {
+                                                        "type": "string"
+                                                    },
+                                                    "grades": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "subject_name": {
+                                                                    "type": "string"
+                                                                },
+                                                                "totalGrade": {
+                                                                    "type": "number",
+                                                                    "format": "float"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Setting"
+        },
+        {
+            "name": "Admin Doctors"
+        },
+        {
+            "name": "Doctor Student"
+        },
+        {
+            "name": "Student"
+        },
+        {
+            "name": "Admin Students"
+        },
+        {
+            "name": "Student Grades"
+        },
+        {
+            "name": "Admin Subjects"
+        },
+        {
+            "name": "Doctor Subject"
+        },
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Subject",
+            "description": "Subject"
+        }
+    ]
+}

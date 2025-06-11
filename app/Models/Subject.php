@@ -9,11 +9,15 @@ class Subject extends Model
 
     public function doctors()
     {
-        return $this->belongsToMany(Doctor::class, 'doctor_subject');
+        return $this->belongsToMany(Doctor::class, 'doctor_subject', 'subject_id', 'doctor_id');
     }
 
     public function grades()
     {
         return $this->hasMany(Grade::class);
     }
+    public function students()
+{
+    return $this->belongsToMany(Student::class, 'student_subject', 'subject_id', 'student_id');
+}
 }
