@@ -7,7 +7,9 @@
     "paths": {
         "/api/setting": {
             "get": {
-                "tags": ["Setting"],
+                "tags": [
+                    "Setting"
+                ],
                 "summary": "Get system setting",
                 "description": "Retrieve all system setting including id, showGrades, academic_year, and current_semester.",
                 "operationId": "cc60c14007fc0bf895dcbe7101089cd0",
@@ -46,7 +48,9 @@
                 }
             },
             "post": {
-                "tags": ["Setting"],
+                "tags": [
+                    "Setting"
+                ],
                 "summary": "Create new system setting",
                 "description": "Create new system setting with showGrades, academic_year, and current_semester.",
                 "operationId": "21e9374f9a24cd0441abeaaafd15b07b",
@@ -121,7 +125,9 @@
         },
         "/api/setting/{id}": {
             "put": {
-                "tags": ["Setting"],
+                "tags": [
+                    "Setting"
+                ],
                 "summary": "Update system setting",
                 "description": "Update existing system setting by ID.",
                 "operationId": "d51ed5b3e58ccb66e5b42c8762fe05c2",
@@ -212,7 +218,9 @@
                 }
             },
             "delete": {
-                "tags": ["Setting"],
+                "tags": [
+                    "Setting"
+                ],
                 "summary": "Delete system setting",
                 "description": "Delete a system setting by its ID.",
                 "operationId": "c032155900a017f3d2e58823a1cacec7",
@@ -265,7 +273,9 @@
         },
         "/api/login": {
             "post": {
-                "tags": ["Authentication"],
+                "tags": [
+                    "Authentication"
+                ],
                 "summary": "Login user",
                 "description": "Authenticate user and return JWT token",
                 "operationId": "a11c4f1eecb542274aa97927040c02e7",
@@ -274,7 +284,10 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": ["code", "password"],
+                                "required": [
+                                    "code",
+                                    "password"
+                                ],
                                 "properties": {
                                     "code": {
                                         "type": "string",
@@ -321,7 +334,9 @@
         },
         "/api/admin/doctors": {
             "get": {
-                "tags": ["Admin Doctors"],
+                "tags": [
+                    "Admin Doctors"
+                ],
                 "summary": "Get paginated list of doctors",
                 "description": "Returns a paginated list of doctors with their subjects",
                 "operationId": "c447c2efb4e9f89a4bd2abbd2ab05586",
@@ -437,7 +452,9 @@
                 }
             },
             "post": {
-                "tags": ["Admin Doctors"],
+                "tags": [
+                    "Admin Doctors"
+                ],
                 "summary": "Create a new doctor",
                 "description": "Create a new doctor with the specified data",
                 "operationId": "281e85246564e6e8561f260b1b54ae71",
@@ -559,7 +576,9 @@
         },
         "/api/admin/doctors/{id}": {
             "get": {
-                "tags": ["Admin Doctors"],
+                "tags": [
+                    "Admin Doctors"
+                ],
                 "summary": "Get doctor by ID",
                 "description": "Retrieve a single doctor by their ID",
                 "operationId": "170aabc437d4c5071d0bc3816ee9670b",
@@ -642,7 +661,9 @@
                 }
             },
             "put": {
-                "tags": ["Admin Doctors"],
+                "tags": [
+                    "Admin Doctors"
+                ],
                 "summary": "Update a doctor",
                 "description": "Update an existing doctor's data. Password is optional - if not provided, the existing password will be kept.",
                 "operationId": "c20bf5df2270281028e59cfa1642385a",
@@ -807,7 +828,9 @@
                 }
             },
             "delete": {
-                "tags": ["Admin Doctors"],
+                "tags": [
+                    "Admin Doctors"
+                ],
                 "summary": "Delete a doctor",
                 "description": "Delete a doctor by ID",
                 "operationId": "d73be1c4a64227c4849771494dc942be",
@@ -847,7 +870,9 @@
         },
         "/api/student/{student_id}/grades": {
             "post": {
-                "tags": ["Doctor Student"],
+                "tags": [
+                    "Doctor Student"
+                ],
                 "summary": "Add student grades",
                 "description": "Store student grade information in grades table for specific subject",
                 "operationId": "c4d7c45831eca8cb2089baa408873e6b",
@@ -1070,7 +1095,9 @@
         },
         "/api/student/{student_id}/grades/{subject_id}": {
             "get": {
-                "tags": ["Doctor Student"],
+                "tags": [
+                    "Doctor Student"
+                ],
                 "summary": "Get student grade for a subject",
                 "description": "Retrieve a student's grade record for a specific subject",
                 "operationId": "56262136a6e94ae820f77aefc8077173",
@@ -1129,7 +1156,9 @@
                 }
             },
             "put": {
-                "tags": ["Doctor Student"],
+                "tags": [
+                    "Doctor Student"
+                ],
                 "summary": "Update student grade for a subject",
                 "description": "Update a student's grade record for a specific subject",
                 "operationId": "94a2c5bafefdbaa0d24f6290cffe9d95",
@@ -1267,7 +1296,9 @@
         },
         "/api/student/{student_id}/grades-gpa": {
             "get": {
-                "tags": ["Student"],
+                "tags": [
+                    "Student"
+                ],
                 "summary": "Get grades for a student for the current academic year and semester",
                 "description": "Returns only the grades for the academic year and semester specified in the Admin table, and only for subjects that belong to that semester. For example, if the Admin table is set to Semester 2, only grades for subjects in Semester 2 will be shown. If showGrades in Admin is false, returns an empty array and GPA/CGPA = 0.",
                 "operationId": "ef4ad3a959e86150f2c9ac02ea9d7f3f",
@@ -1373,7 +1404,9 @@
         },
         "/api/admin/students": {
             "get": {
-                "tags": ["Admin Students"],
+                "tags": [
+                    "Admin Students"
+                ],
                 "summary": "Get paginated list of students",
                 "description": "Returns paginated list of students with optional filtering and search",
                 "operationId": "getStudentsList",
@@ -1508,7 +1541,9 @@
                 }
             },
             "post": {
-                "tags": ["Admin Students"],
+                "tags": [
+                    "Admin Students"
+                ],
                 "summary": "Create a new student",
                 "description": "Creates a new student record",
                 "operationId": "createStudent",
@@ -1546,12 +1581,20 @@
                                     },
                                     "level": {
                                         "type": "string",
-                                        "enum": ["One", "Two", "Three", "Four"],
+                                        "enum": [
+                                            "One",
+                                            "Two",
+                                            "Three",
+                                            "Four"
+                                        ],
                                         "example": "One"
                                     },
                                     "specialization": {
                                         "type": "string",
-                                        "enum": ["CS", "IT"],
+                                        "enum": [
+                                            "CS",
+                                            "IT"
+                                        ],
                                         "example": "CS"
                                     }
                                 },
@@ -1652,7 +1695,9 @@
         },
         "/api/admin/students/{id}": {
             "get": {
-                "tags": ["Admin Students"],
+                "tags": [
+                    "Admin Students"
+                ],
                 "summary": "Get student by ID",
                 "description": "Retrieve a single student by their ID",
                 "operationId": "ff9d7c17e8bb7b68aebc7c24d52b8ba6",
@@ -1719,7 +1764,9 @@
                 }
             },
             "put": {
-                "tags": ["Admin Students"],
+                "tags": [
+                    "Admin Students"
+                ],
                 "summary": "Update a student",
                 "description": "Updates an existing student record",
                 "operationId": "updateStudent",
@@ -1760,12 +1807,20 @@
                                     },
                                     "level": {
                                         "type": "string",
-                                        "enum": ["One", "Two", "Three", "Four"],
+                                        "enum": [
+                                            "One",
+                                            "Two",
+                                            "Three",
+                                            "Four"
+                                        ],
                                         "example": "Two"
                                     },
                                     "specialization": {
                                         "type": "string",
-                                        "enum": ["CS", "IT"],
+                                        "enum": [
+                                            "CS",
+                                            "IT"
+                                        ],
                                         "example": "IT"
                                     }
                                 },
@@ -1880,7 +1935,9 @@
                 }
             },
             "delete": {
-                "tags": ["Admin Students"],
+                "tags": [
+                    "Admin Students"
+                ],
                 "summary": "Delete a student",
                 "description": "Deletes a student record by ID",
                 "operationId": "deleteStudent",
@@ -1933,7 +1990,9 @@
         },
         "/api/admin/students/{student_id}/examination-results": {
             "get": {
-                "tags": ["Student Grades"],
+                "tags": [
+                    "Student Grades"
+                ],
                 "summary": "Get examination results for a student",
                 "description": "Retrieve student details and examination results for all semesters.",
                 "operationId": "9b4040ba76478dc03b374a2a43c845cd",
@@ -2045,7 +2104,9 @@
         },
         "/api/admin/subjects": {
             "get": {
-                "tags": ["Admin Subjects"],
+                "tags": [
+                    "Admin Subjects"
+                ],
                 "summary": "Get paginated list of subjects with filtering and search",
                 "description": "Returns a paginated list of all subjects with filtering by specialization, level, and search by subject code",
                 "operationId": "e2df65e104bdb54572606e9d6a17ff0d",
@@ -2077,7 +2138,10 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "enum": ["CS", "IT"]
+                            "enum": [
+                                "CS",
+                                "IT"
+                            ]
                         }
                     },
                     {
@@ -2087,7 +2151,12 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "enum": ["One", "Two", "Three", "Four"]
+                            "enum": [
+                                "One",
+                                "Two",
+                                "Three",
+                                "Four"
+                            ]
                         }
                     },
                     {
@@ -2097,7 +2166,10 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "enum": ["One", "Two"]
+                            "enum": [
+                                "One",
+                                "Two"
+                            ]
                         }
                     },
                     {
@@ -2155,7 +2227,10 @@
                                                     },
                                                     "specialization": {
                                                         "type": "string",
-                                                        "enum": ["CS", "IT"],
+                                                        "enum": [
+                                                            "CS",
+                                                            "IT"
+                                                        ],
                                                         "example": "CS"
                                                     },
                                                     "level": {
@@ -2170,7 +2245,10 @@
                                                     },
                                                     "semester": {
                                                         "type": "string",
-                                                        "enum": ["One", "Two"],
+                                                        "enum": [
+                                                            "One",
+                                                            "Two"
+                                                        ],
                                                         "example": "One"
                                                     }
                                                 },
@@ -2186,7 +2264,9 @@
                 }
             },
             "post": {
-                "tags": ["Admin Subjects"],
+                "tags": [
+                    "Admin Subjects"
+                ],
                 "summary": "Create a new subject",
                 "description": "Create a new subject with the specified data",
                 "operationId": "e659949a1ea700ba825eb898475494fc",
@@ -2218,17 +2298,28 @@
                                     },
                                     "specialization": {
                                         "type": "string",
-                                        "enum": ["CS", "IT"],
+                                        "enum": [
+                                            "CS",
+                                            "IT"
+                                        ],
                                         "example": "CS"
                                     },
                                     "level": {
                                         "type": "string",
-                                        "enum": ["One", "Two", "Three", "Four"],
+                                        "enum": [
+                                            "One",
+                                            "Two",
+                                            "Three",
+                                            "Four"
+                                        ],
                                         "example": "One"
                                     },
                                     "semester": {
                                         "type": "string",
-                                        "enum": ["One", "Two"],
+                                        "enum": [
+                                            "One",
+                                            "Two"
+                                        ],
                                         "example": "One"
                                     }
                                 },
@@ -2291,7 +2382,9 @@
         },
         "/api/admin/subjects/{id}": {
             "get": {
-                "tags": ["Admin Subjects"],
+                "tags": [
+                    "Admin Subjects"
+                ],
                 "summary": "Get subject by ID",
                 "description": "Retrieve a single subject by its ID",
                 "operationId": "34864a2c9f1e4f7c1894d92a3758813c",
@@ -2331,7 +2424,10 @@
                                         },
                                         "specialization": {
                                             "type": "string",
-                                            "enum": ["CS", "IT"],
+                                            "enum": [
+                                                "CS",
+                                                "IT"
+                                            ],
                                             "example": "CS"
                                         },
                                         "level": {
@@ -2346,7 +2442,10 @@
                                         },
                                         "semester": {
                                             "type": "string",
-                                            "enum": ["One", "Two"],
+                                            "enum": [
+                                                "One",
+                                                "Two"
+                                            ],
                                             "example": "One"
                                         }
                                     },
@@ -2374,7 +2473,9 @@
                 }
             },
             "put": {
-                "tags": ["Admin Subjects"],
+                "tags": [
+                    "Admin Subjects"
+                ],
                 "summary": "Update a subject",
                 "description": "Update an existing subject's data",
                 "operationId": "b08252cd001efecb11da22e94ea6a1de",
@@ -2417,17 +2518,28 @@
                                     },
                                     "specialization": {
                                         "type": "string",
-                                        "enum": ["CS", "IT"],
+                                        "enum": [
+                                            "CS",
+                                            "IT"
+                                        ],
                                         "example": "CS"
                                     },
                                     "level": {
                                         "type": "string",
-                                        "enum": ["One", "Two", "Three", "Four"],
+                                        "enum": [
+                                            "One",
+                                            "Two",
+                                            "Three",
+                                            "Four"
+                                        ],
                                         "example": "Two"
                                     },
                                     "semester": {
                                         "type": "string",
-                                        "enum": ["One", "Two"],
+                                        "enum": [
+                                            "One",
+                                            "Two"
+                                        ],
                                         "example": "Two"
                                     }
                                 },
@@ -2491,7 +2603,9 @@
                 }
             },
             "delete": {
-                "tags": ["Admin Subjects"],
+                "tags": [
+                    "Admin Subjects"
+                ],
                 "summary": "Delete a subject",
                 "description": "Delete a subject by its ID",
                 "operationId": "91bd1b109ab39b34cef9368524bb4c96",
@@ -2544,7 +2658,9 @@
         },
         "/api/doctor/{doctor_id}/subjects": {
             "get": {
-                "tags": ["Doctor Subject"],
+                "tags": [
+                    "Doctor Subject"
+                ],
                 "summary": "Get all subjects for specific doctor (filtered by semesters in admin table)",
                 "description": "Returns paginated data for doctor's subjects with filtering and search. Only subjects in semesters that exist in the admin table will be returned.",
                 "operationId": "354b871314432d93388d2421bc6950df",
@@ -2585,7 +2701,10 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "enum": ["CS", "IT"]
+                            "enum": [
+                                "CS",
+                                "IT"
+                            ]
                         }
                     },
                     {
@@ -2595,7 +2714,12 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "enum": ["One", "Two", "Three", "Four"]
+                            "enum": [
+                                "One",
+                                "Two",
+                                "Three",
+                                "Four"
+                            ]
                         }
                     },
                     {
@@ -2605,7 +2729,10 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "enum": ["One", "Two"]
+                            "enum": [
+                                "One",
+                                "Two"
+                            ]
                         }
                     },
                     {
@@ -2663,7 +2790,10 @@
                                                     },
                                                     "specialization": {
                                                         "type": "string",
-                                                        "enum": ["CS", "IT"],
+                                                        "enum": [
+                                                            "CS",
+                                                            "IT"
+                                                        ],
                                                         "example": "CS"
                                                     },
                                                     "level": {
@@ -2678,7 +2808,10 @@
                                                     },
                                                     "semester": {
                                                         "type": "string",
-                                                        "enum": ["One", "Two"],
+                                                        "enum": [
+                                                            "One",
+                                                            "Two"
+                                                        ],
                                                         "example": "One"
                                                     },
                                                     "totalGrade": {
@@ -2737,7 +2870,9 @@
         },
         "/api/doctor/subject/{subject_id}": {
             "put": {
-                "tags": ["Doctor Subject"],
+                "tags": [
+                    "Doctor Subject"
+                ],
                 "summary": "Update subject grades by doctor",
                 "description": "Update grading parameters for a subject (only accessible by doctors)",
                 "operationId": "2f6833a1705d2ab22179304d1823e607",
@@ -2876,7 +3011,9 @@
         },
         "/api/doctor/{doctor_id}/assigned-students": {
             "get": {
-                "tags": ["Doctor Student"],
+                "tags": [
+                    "Doctor Student"
+                ],
                 "summary": "Get students registered in subjects assigned to a doctor (by level)",
                 "description": "Returns a list of students for each subject assigned to the doctor, where students are matched by level.",
                 "operationId": "ba5c3973e3b27279952370edcd966a14",
@@ -2962,7 +3099,9 @@
         },
         "/api/subject/{subject_id}/statistics": {
             "get": {
-                "tags": ["Subject"],
+                "tags": [
+                    "Subject"
+                ],
                 "summary": "Get statistics for a subject by ID",
                 "description": "Retrieve statistics for a subject including grade distribution, pass/fail counts, and student details.",
                 "operationId": "6aa7d5bd13263b9f909fd9944e565353",
@@ -3076,7 +3215,9 @@
         },
         "/api/student/{student_id}/details": {
             "get": {
-                "tags": ["Student"],
+                "tags": [
+                    "Student"
+                ],
                 "summary": "Get detailed information for a student",
                 "description": "Retrieve student information including personal details, total grade character for each subject, GPA for the current semester, and grades for all levels and academic years.",
                 "operationId": "ffeaa496714e607dee8190073ce476c9",
