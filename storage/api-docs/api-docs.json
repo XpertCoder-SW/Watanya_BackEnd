@@ -3334,6 +3334,54 @@
                     }
                 }
             }
+        },
+        "/api/admin/subjects/unassigned": {
+            "get": {
+                "tags": [
+                    "Admin Subjects"
+                ],
+                "summary": "Get all subjects not assigned to any doctor",
+                "description": "Returns all subjects that are not assigned to any doctor",
+                "operationId": "4415908fe2545366298ab1f174c3065e",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "code": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "creditHours": {
+                                                "type": "integer"
+                                            },
+                                            "specialization": {
+                                                "type": "string"
+                                            },
+                                            "level": {
+                                                "type": "string"
+                                            },
+                                            "semester": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [
