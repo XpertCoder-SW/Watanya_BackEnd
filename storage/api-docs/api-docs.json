@@ -3030,7 +3030,7 @@
                     {
                         "name": "page",
                         "in": "query",
-                        "description": "Page number",
+                        "description": "Page number for subjects",
                         "required": false,
                         "schema": {
                             "type": "integer",
@@ -3040,11 +3040,46 @@
                     {
                         "name": "per_page",
                         "in": "query",
-                        "description": "Items per page",
+                        "description": "Items per page for subjects",
                         "required": false,
                         "schema": {
                             "type": "integer",
                             "default": 10
+                        }
+                    },
+                    {
+                        "name": "student_page",
+                        "in": "query",
+                        "description": "Page number for students",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "student_per_page",
+                        "in": "query",
+                        "description": "Items per page for students",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "level",
+                        "in": "query",
+                        "description": "Filter by level (One, Two, Three, Four)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "One",
+                                "Two",
+                                "Three",
+                                "Four"
+                            ]
                         }
                     }
                 ],
@@ -3070,6 +3105,22 @@
                                         "total_items": {
                                             "type": "integer",
                                             "example": 50
+                                        },
+                                        "student_current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "student_per_page": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "student_total_pages": {
+                                            "type": "integer",
+                                            "example": 3
+                                        },
+                                        "student_total_items": {
+                                            "type": "integer",
+                                            "example": 25
                                         },
                                         "subjects": {
                                             "type": "array",
