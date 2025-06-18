@@ -735,8 +735,7 @@ public function getAssignedStudents(Request $request, $doctor_id)
     $result = $subjects->map(function($subject) use ($perPage, $page) {
         // Get students whose level matches the subject's level, with pagination
         $studentsQuery = \App\Models\Student::where('level', $subject->level)
-            // Uncomment the next line if you want to match specialization too
-            // ->where('specialization', $subject->specialization)
+            ->where('specialization', $subject->specialization)
             ->select('id', 'code', 'name', 'email', 'phoneNumber', 'level', 'specialization', 'academic_year', 'gpa');
 
         $studentsPaginated = $studentsQuery->paginate($perPage, ['*'], 'page', $page);
