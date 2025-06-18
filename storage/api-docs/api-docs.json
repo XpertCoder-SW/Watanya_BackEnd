@@ -3335,47 +3335,161 @@
                 }
             }
         },
-        "/api/admin/subjects/unassigned": {
+        "/api/admin/unassigned-subjects": {
             "get": {
                 "tags": [
                     "Admin Subjects"
                 ],
-                "summary": "Get all subjects not assigned to any doctor",
-                "description": "Returns all subjects that are not assigned to any doctor",
-                "operationId": "4415908fe2545366298ab1f174c3065e",
+                "summary": "Get all subjects that haven't been assigned to any doctor",
+                "description": "Returns a list of subjects that don't exist in the doctor_subject table",
+                "operationId": "6111a13d5d0f3c2d8c30162c69dae0a6",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "specialization",
+                        "in": "query",
+                        "description": "Filter by specialization (CS, IT)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "CS",
+                                "IT"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "level",
+                        "in": "query",
+                        "description": "Filter by level (One, Two, Three, Four)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "One",
+                                "Two",
+                                "Three",
+                                "Four"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "semester",
+                        "in": "query",
+                        "description": "Filter by semester (One, Two)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "One",
+                                "Two"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search by subject code",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer"
-                                            },
-                                            "code": {
-                                                "type": "string"
-                                            },
-                                            "name": {
-                                                "type": "string"
-                                            },
-                                            "creditHours": {
-                                                "type": "integer"
-                                            },
-                                            "specialization": {
-                                                "type": "string"
-                                            },
-                                            "level": {
-                                                "type": "string"
-                                            },
-                                            "semester": {
-                                                "type": "string"
-                                            }
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
                                         },
-                                        "type": "object"
-                                    }
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "total_pages": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "total_items": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "subjects": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "code": {
+                                                        "type": "string",
+                                                        "example": "CS101"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Introduction to Computer Science"
+                                                    },
+                                                    "creditHours": {
+                                                        "type": "integer",
+                                                        "example": 3
+                                                    },
+                                                    "specialization": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "CS",
+                                                            "IT"
+                                                        ],
+                                                        "example": "CS"
+                                                    },
+                                                    "level": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "One",
+                                                            "Two",
+                                                            "Three",
+                                                            "Four"
+                                                        ],
+                                                        "example": "One"
+                                                    },
+                                                    "semester": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "One",
+                                                            "Two"
+                                                        ],
+                                                        "example": "One"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }

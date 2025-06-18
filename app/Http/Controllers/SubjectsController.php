@@ -994,4 +994,141 @@ public function getAssignedStudents(Request $request, $doctor_id)
             'grades' => $gradesArr
         ]);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/admin/unassigned-subjects",
+     *     tags={"Admin Subjects"},
+     *     summary="Get all subjects that haven't been assigned to any doctor",
+     *     description="Returns a list of subjects that don't exist in the doctor_subject table",
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Items per page",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=10)
+     *     ),
+     *     @OA\Parameter(
+     *         name="specialization",
+     *         in="query",
+     *         description="Filter by specialization (CS, IT)",
+     *         required=false,
+     *         @OA\Schema(type="string", enum={"CS", "IT"})
+     *     ),
+     *     @OA\Parameter(
+     *         name="level",
+     *         in="query",
+     *         description="Filter by level (One, Two, Three, Four)",
+     *         required=false,
+     *         @OA\Schema(type="string", enum={"One", "Two", "Three", "Four"})
+     *     ),
+     *     @OA\Parameter(
+     *         name="semester",
+     *         in="query",
+     *         description="Filter by semester (One, Two)",
+     *         required=false,
+     *         @OA\Schema(type="string", enum={"One", "Two"})
+     *     ),
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="Search by subject code",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="current_page", type="integer", example=1),
+     *             @OA\Property(property="per_page", type="integer", example=10),
+     *             @OA\Property(property="total_pages", type="integer", example=5),
+     *             @OA\Property(property="total_items", type="integer", example=50),
+     *             @OA\Property(
+     *                 property="subjects",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="code", type="string", example="CS101"),
+     *                     @OA\Property(property="name", type="string", example="Introduction to Computer Science"),
+     *                     @OA\Property(property="creditHours", type="integer", example=3),
+     *                     @OA\Property(property="specialization", type="string", enum={"CS", "IT"}, example="CS"),
+     *                     @OA\Property(property="level", type="string", enum={"One", "Two", "Three", "Four"}, example="One"),
+     *                     @OA\Property(property="semester", type="string", enum={"One", "Two"}, example="One")
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function getUnassignedSubjects(Request $request)
+    {
+        $perPage = $request->input('per_page', 10);
+        $page = $request->input('page', 1);
+
+        // Get the current semester from the Admin table
+        $currentSemester = \App\Models\Admin::value('current_semester');
+
+        // Start with all subjects
+        $query = Subject::query();
+
+        // Filter out subjects that are already assigned to doctors
+        $query->whereNotExists(function ($subquery) {
+            $subquery->select(DB::raw(1))
+                ->from('doctor_subject')
+                ->whereRaw('doctor_subject.subject_id = subjects.id');
+        });
+
+        // Filter by current semester
+        if ($currentSemester) {
+            $query->where('semester', $currentSemester);
+        }
+
+        // Apply filters
+        if ($request->has('specialization') && in_array($request->specialization, ['CS', 'IT'])) {
+            $query->where('specialization', $request->specialization);
+        }
+
+        if ($request->has('level') && in_array($request->level, ['One', 'Two', 'Three', 'Four'])) {
+            $query->where('level', $request->level);
+        }
+
+        if ($request->has('semester') && in_array($request->semester, ['One', 'Two'])) {
+            $query->where('semester', $request->semester);
+        }
+
+        // Apply search by subject code
+        if ($request->has('search')) {
+            $searchTerm = $request->input('search');
+            $query->where('code', 'LIKE', "%{$searchTerm}%");
+        }
+
+        $subjects = $query->select([
+                'id',
+                'code',
+                'name',
+                'creditHours',
+                'specialization',
+                'level',
+                'semester'
+            ])
+            ->orderBy('code')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json([
+            'current_page' => $subjects->currentPage(),
+            'per_page' => $subjects->perPage(),
+            'total_pages' => $subjects->lastPage(),
+            'total_items' => $subjects->total(),
+            'subjects' => $subjects->items()
+        ], 200);
+    }
 }

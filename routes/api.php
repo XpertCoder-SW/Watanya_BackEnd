@@ -91,3 +91,6 @@ Route::get('/admin/students/gpa-stats', [StudentsController::class, 'getGpaStats
 Route::get('/subject/{subject_id}/statistics', [SubjectsController::class, 'getSubjectStatistics']);
 Route::get('/student/{student_id}/details', [SubjectsController::class, 'getStudentDetails']);
 Route::get('/api/admin/students/{student_id}/examination-results', [StudentsController::class, 'getExaminationResults']);
+
+
+Route::get('/admin/unassigned-subjects', [SubjectsController::class, 'getUnassignedSubjects']);
