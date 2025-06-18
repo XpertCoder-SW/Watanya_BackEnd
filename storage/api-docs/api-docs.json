@@ -3026,6 +3026,26 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
                     }
                 ],
                 "responses": {
@@ -3035,6 +3055,22 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "total_pages": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "total_items": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
                                         "subjects": {
                                             "type": "array",
                                             "items": {
@@ -3076,6 +3112,35 @@
                                                                 "gpa": {
                                                                     "type": "number",
                                                                     "format": "float"
+                                                                },
+                                                                "gradeStatus": {
+                                                                    "type": "string",
+                                                                    "nullable": true
+                                                                },
+                                                                "yearsWorkGrade": {
+                                                                    "type": "number",
+                                                                    "format": "float",
+                                                                    "nullable": true
+                                                                },
+                                                                "midtermGrade": {
+                                                                    "type": "number",
+                                                                    "format": "float",
+                                                                    "nullable": true
+                                                                },
+                                                                "finalGrade": {
+                                                                    "type": "number",
+                                                                    "format": "float",
+                                                                    "nullable": true
+                                                                },
+                                                                "practicalGrade": {
+                                                                    "type": "number",
+                                                                    "format": "float",
+                                                                    "nullable": true
+                                                                },
+                                                                "totalGrade": {
+                                                                    "type": "number",
+                                                                    "format": "float",
+                                                                    "nullable": true
                                                                 }
                                                             },
                                                             "type": "object"

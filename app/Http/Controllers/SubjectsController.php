@@ -676,10 +676,28 @@ public function getDoctorSubjects(Request $request, $doctor_id)
  *         description="ID of the doctor",
  *         @OA\Schema(type="integer")
  *     ),
+ *     @OA\Parameter(
+ *         name="page",
+ *         in="query",
+ *         description="Page number",
+ *         required=false,
+ *         @OA\Schema(type="integer", default=1)
+ *     ),
+ *     @OA\Parameter(
+ *         name="per_page",
+ *         in="query",
+ *         description="Items per page",
+ *         required=false,
+ *         @OA\Schema(type="integer", default=10)
+ *     ),
  *     @OA\Response(
  *         response=200,
  *         description="List of students grouped by subject",
  *         @OA\JsonContent(
+ *             @OA\Property(property="current_page", type="integer", example=1),
+ *             @OA\Property(property="per_page", type="integer", example=10),
+ *             @OA\Property(property="total_pages", type="integer", example=5),
+ *             @OA\Property(property="total_items", type="integer", example=50),
  *             @OA\Property(
  *                 property="subjects",
  *                 type="array",
@@ -700,7 +718,13 @@ public function getDoctorSubjects(Request $request, $doctor_id)
  *                             @OA\Property(property="level", type="string"),
  *                             @OA\Property(property="specialization", type="string"),
  *                             @OA\Property(property="academic_year", type="string"),
- *                             @OA\Property(property="gpa", type="number", format="float")
+ *                             @OA\Property(property="gpa", type="number", format="float"),
+ *                             @OA\Property(property="gradeStatus", type="string", nullable=true),
+ *                             @OA\Property(property="yearsWorkGrade", type="number", format="float", nullable=true),
+ *                             @OA\Property(property="midtermGrade", type="number", format="float", nullable=true),
+ *                             @OA\Property(property="finalGrade", type="number", format="float", nullable=true),
+ *                             @OA\Property(property="practicalGrade", type="number", format="float", nullable=true),
+ *                             @OA\Property(property="totalGrade", type="number", format="float", nullable=true)
  *                         )
  *                     )
  *                 )
@@ -718,36 +742,34 @@ public function getAssignedStudents(Request $request, $doctor_id)
     // Get the current semester from the Admin table
     $currentSemester = \App\Models\Admin::value('current_semester');
 
-    // Get subjects assigned to the doctor and filter by current semester
+    $perPage = $request->input('per_page', 10);
+    $page = $request->input('page', 1);
+
+    // Get subjects assigned to the doctor and filter by current semester with pagination
     $subjects = \App\Models\Subject::whereHas('doctors', function($q) use ($doctor_id) {
         $q->where('doctor_id', $doctor_id);
     })
     ->where('semester', $currentSemester)
-    ->get();
+    ->paginate($perPage, ['*'], 'page', $page);
 
     if ($subjects->isEmpty()) {
         return response()->json(['message' => 'No subjects assigned to this doctor for the current semester or doctor not found'], 404);
     }
 
-    $perPage = $request->input('per_page', 10);
-    $page = $request->input('page', 1);
-
-    $result = $subjects->map(function($subject) use ($perPage, $page) {
-        // Get students whose level matches the subject's level, with pagination
-        $studentsQuery = \App\Models\Student::where('level', $subject->level)
+    $result = collect($subjects->items())->map(function($subject) {
+        // Get students whose level matches the subject's level
+        $students = \App\Models\Student::where('level', $subject->level)
             ->where('specialization', $subject->specialization)
-            ->select('id', 'code', 'name', 'email', 'phoneNumber', 'level', 'specialization', 'academic_year', 'gpa');
-
-        $studentsPaginated = $studentsQuery->paginate($perPage, ['*'], 'page', $page);
+            ->select('id', 'code', 'name', 'email', 'phoneNumber', 'level', 'specialization', 'academic_year', 'gpa')
+            ->get();
 
         // Attach grades for each student in this subject
-        $studentsWithGrades = collect($studentsPaginated->items())->map(function($student) use ($subject) {
+        $studentsWithGrades = $students->map(function($student) use ($subject) {
             $grade = DB::table('grades')
                 ->where('student_id', $student->id)
                 ->where('subject_id', $subject->id)
                 ->first();
         
-            // Use $student->toArray() to get only the attributes
             return array_merge(
                 $student->toArray(),
                 [
@@ -765,16 +787,16 @@ public function getAssignedStudents(Request $request, $doctor_id)
             'subject_id' => $subject->id,
             'subject_name' => $subject->name,
             'students' => $studentsWithGrades,
-            'students_pagination' => [
-                'current_page' => $studentsPaginated->currentPage(),
-                'per_page' => $studentsPaginated->perPage(),
-                'total_pages' => $studentsPaginated->lastPage(),
-                'total_items' => $studentsPaginated->total(),
-            ]
         ];
-    })->values()->all(); // Ensure it's a plain array
+    })->values()->all();
 
-    return response()->json(['subjects' => $result], 200);
+    return response()->json([
+        'current_page' => $subjects->currentPage(),
+        'per_page' => $subjects->perPage(),
+        'total_pages' => $subjects->lastPage(),
+        'total_items' => $subjects->total(),
+        'subjects' => $result
+    ], 200);
 }
 
 /**
