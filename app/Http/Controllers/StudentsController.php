@@ -331,6 +331,10 @@ public function index(Request $request)
             ], 404);
         }
 
+        // Get current academic year from Admin model
+        $currentAcademicYear = Admin::value('academic_year');
+        $updateData['academic_year'] = $currentAcademicYear;
+
         $student->update($updateData);
 
         $studentData = $student->makeHidden(['password', 'created_at', 'updated_at']);
