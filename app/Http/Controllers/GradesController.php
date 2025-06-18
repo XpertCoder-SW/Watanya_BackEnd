@@ -493,7 +493,22 @@ class GradesController
 
         $admin = Admin::first();
         $currentAcademicYear = $admin ? $admin->academic_year : date('Y').'-'.(date('Y')+1);
-        $currentSemester = $admin ? $admin->current_semester : null;
+        
+        // Auto-detect current semester based on date
+        $currentMonth = date('n'); // 1-12
+        $currentSemester = null;
+        
+        if ($currentMonth >= 9 && $currentMonth <= 12) {
+            $currentSemester = 'One'; // First semester: September to December
+        } elseif ($currentMonth >= 1 && $currentMonth <= 5) {
+            $currentSemester = 'Two'; // Second semester: January to May
+        }
+        
+        // Override with admin setting if available
+        if ($admin && $admin->current_semester) {
+            $currentSemester = $admin->current_semester;
+        }
+        
         $showGrades = $admin ? $admin->showGrades : true;
         
         if (!$showGrades) {
@@ -553,7 +568,7 @@ class GradesController
         $cgpa = $gpa;
 
         // Prepare grades with subject name and credit hours
-        $gradesWithSubject = $grades->map(function($grade) {
+        $gradesWithSubject = $grades->map(function($grade) use ($currentSemester) {
             $subject = Subject::find($grade->subject_id);
             return [
                 'id' => $grade->id,
@@ -568,7 +583,7 @@ class GradesController
                 'finalGrade' => $grade->finalGrade,
                 'gradeStatus' => $grade->gradeStatus,
                 'academic_year' => $grade->academic_year,
-                'current_semester' => $grade->current_semester ?? null,
+                'current_semester' => $currentSemester,
             ];
         });
 
