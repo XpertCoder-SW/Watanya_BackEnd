@@ -27,7 +27,7 @@ Route::get('/admin/subjects', [SubjectsController::class, 'index']); // Get all 
 Route::get('/admin/subjects/{id}', [SubjectsController::class, 'show']); // Get subject by ID
 Route::put('/admin/subjects/{id}', [SubjectsController::class, 'update']); // Update subject by ID
 Route::delete('/admin/subjects/{id}', [SubjectsController::class, 'delete']); // Delete subject by ID
-
+Route::get('/admin/subjects/{subject_id}/grade-statistics', [SubjectsController::class, 'getSubjectGradeStatistics']); // Get grade statistics for subject
 
 ///////////////////////////////////////////////////////////// End of Admin Subjects APIs /////////////////////////////////////////////////////////////
 
@@ -88,7 +88,6 @@ Route::post('/login', [Controller::class, 'login']);
 ///////////////////////////////////////////////////////////// Start of Satatistics APIs ///////////////////////////////////////////////////////////
 
 Route::get('/admin/students/gpa-stats', [StudentsController::class, 'getGpaStats']);
-Route::get('/subject/{subject_id}/statistics', [SubjectsController::class, 'getSubjectStatistics']);
 Route::get('/student/{student_id}/details', [SubjectsController::class, 'getStudentDetails']);
 Route::get('/api/admin/students/{student_id}/examination-results', [StudentsController::class, 'getExaminationResults']);
 

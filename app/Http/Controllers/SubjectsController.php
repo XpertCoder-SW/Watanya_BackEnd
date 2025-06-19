@@ -844,101 +844,6 @@ public function getAssignedStudents(Request $request, $doctor_id)
     ], 200);
 }
 
-/**
-     * @OA\Get(
-     *     path="/api/subject/{subject_id}/statistics",
-     *     tags={"Subject"},
-     *     summary="Get statistics for a subject by ID",
-     *     description="Retrieve statistics for a subject including grade distribution, pass/fail counts, and student details.",
-     *     @OA\Parameter(
-     *         name="subject_id",
-     *         in="path",
-     *         description="ID of the subject",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Statistics retrieved successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="gradeDistribution", type="object",
-     *                 @OA\Property(property="A", type="integer"),
-     *                 @OA\Property(property="B+", type="integer"),
-     *                 @OA\Property(property="B", type="integer"),
-     *                 @OA\Property(property="C+", type="integer"),
-     *                 @OA\Property(property="C", type="integer"),
-     *                 @OA\Property(property="F", type="integer")
-     *             ),
-     *             @OA\Property(property="passFailCounts", type="object",
-     *                 @OA\Property(property="pass", type="integer"),
-     *                 @OA\Property(property="fail", type="integer")
-     *             ),
-     *             @OA\Property(property="specialGradeStatusCounts", type="object",
-     *                 @OA\Property(property="ff*", type="integer"),
-     *                 @OA\Property(property="i*", type="integer"),
-     *                 @OA\Property(property="i", type="integer")
-     *             ),
-     *             @OA\Property(property="students", type="array",
-     *                 @OA\Items(
-     *                     @OA\Property(property="name", type="string"),
-     *                     @OA\Property(property="code", type="string"),
-     *                     @OA\Property(property="totalGradeChar", type="string")
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Subject not found",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Subject not found")
-     *         )
-     *     )
-     * )
-     */
-    public function getSubjectStatistics($subject_id)
-    {
-        // Fetch data from the database
-        $grades = Grade::where('subject_id', $subject_id)->get();
-
-        // Calculate statistics
-        $gradeDistribution = [
-            'A' => $grades->where('totalGradeChar', 'A')->count(),
-            'B+' => $grades->where('totalGradeChar', 'B+')->count(),
-            'B' => $grades->where('totalGradeChar', 'B')->count(),
-            'C+' => $grades->where('totalGradeChar', 'C+')->count(),
-            'C' => $grades->where('totalGradeChar', 'C')->count(),
-            'F' => $grades->where('totalGradeChar', 'F')->count(),
-        ];
-
-        $passFailCounts = [
-            'pass' => $grades->where('gradeStatus', '!=', 'F')->count(),
-            'fail' => $grades->where('gradeStatus', 'F')->count(),
-        ];
-
-        $specialGradeStatusCounts = [
-            'ff*' => $grades->where('gradeStatus', 'ff*')->count(),
-            'i*' => $grades->where('gradeStatus', 'i*')->count(),
-            'i' => $grades->where('gradeStatus', 'i')->count(),
-        ];
-
-        $students = $grades->map(function ($grade) {
-            return [
-                'name' => $grade->student->name,
-                'code' => $grade->student->code,
-                'totalGradeChar' => $grade->totalGradeChar,
-            ];
-        });
-
-        // Return the response
-        return response()->json([
-            'gradeDistribution' => $gradeDistribution,
-            'passFailCounts' => $passFailCounts,
-            'specialGradeStatusCounts' => $specialGradeStatusCounts,
-            'students' => $students,
-        ]);
-    }
-
     /**
      * @OA\Get(
      *     path="/api/student/{student_id}/details",
@@ -1195,6 +1100,185 @@ public function getAssignedStudents(Request $request, $doctor_id)
             'total_pages' => $subjects->lastPage(),
             'total_items' => $subjects->total(),
             'subjects' => $subjects->items()
+        ], 200);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/admin/subjects/{subject_id}/grade-statistics",
+     *     tags={"Admin Subjects"},
+     *     summary="Get grade statistics for a specific subject",
+     *     description="Returns comprehensive grade statistics including counts for each grade letter, grade status, and student details",
+     *     @OA\Parameter(
+     *         name="subject_id",
+     *         in="path",
+     *         description="ID of the subject",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Grade statistics retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="students_total", type="integer", example=98),
+     *             @OA\Property(property="grade_counts", type="object",
+     *                 @OA\Property(property="A", type="integer", example=15),
+     *                 @OA\Property(property="B+", type="integer", example=20),
+     *                 @OA\Property(property="B", type="integer", example=25),
+     *                 @OA\Property(property="C+", type="integer", example=18),
+     *                 @OA\Property(property="C", type="integer", example=12),
+     *                 @OA\Property(property="F", type="integer", example=8),
+     *                 @OA\Property(property="total", type="integer", example=98)
+     *             ),
+     *             @OA\Property(property="grade_status_counts", type="object",
+     *                 @OA\Property(property="ff*", type="integer", example=5),
+     *                 @OA\Property(property="i*", type="integer", example=3),
+     *                 @OA\Property(property="i", type="integer", example=2),
+     *                 @OA\Property(property="total", type="integer", example=98)
+     *             ),
+     *             @OA\Property(property="pass_fail_summary", type="object",
+     *                 @OA\Property(property="passed", type="integer", example=90),
+     *                 @OA\Property(property="failed", type="integer", example=18),
+     *                 @OA\Property(property="total", type="integer", example=108)
+     *             ),
+     *             @OA\Property(property="students", type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="name", type="string", example="Ahmed Mohamed"),
+     *                     @OA\Property(property="code", type="string", example="2021001"),
+     *                     @OA\Property(property="totalGradeChar", type="string", example="A"),
+     *                     @OA\Property(property="gradeStatus", type="string", example="others")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Subject not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Subject not found")
+     *         )
+     *     )
+     * )
+     */
+    public function getSubjectGradeStatistics($subject_id)
+    {
+        // Check if subject exists
+        $subject = Subject::find($subject_id);
+        if (!$subject) {
+            return response()->json(['message' => 'Subject not found'], 404);
+        }
+
+        // Get all grades for this subject
+        $grades = Grade::where('subject_id', $subject_id)
+            ->with('student:id,name,code')
+            ->get();
+
+        // Initialize counters
+        $gradeCounts = [
+            'A' => 0,
+            'B+' => 0,
+            'B' => 0,
+            'C+' => 0,
+            'C' => 0,
+            'F' => 0,
+            'total' => 0
+        ];
+
+        $gradeStatusCounts = [
+            'ff*' => 0,
+            'i*' => 0,
+            'i' => 0,
+            'total' => 0
+        ];
+
+        $students = [];
+
+        foreach ($grades as $grade) {
+            // Count grade letters (except F, handled below)
+            if (isset($grade->totalGradeChar) && $grade->totalGradeChar !== 'F') {
+                $gradeCounts[$grade->totalGradeChar]++;
+                $gradeCounts['total']++;
+            }
+
+            // Count F only if gradeStatus is not ff*, i*, i
+            if (
+                isset($grade->totalGradeChar) && $grade->totalGradeChar === 'F' &&
+                (!isset($grade->gradeStatus) || !in_array($grade->gradeStatus, ['ff*', 'i*', 'i']))
+            ) {
+                $gradeCounts['F']++;
+                $gradeCounts['total']++;
+            }
+
+            // Count grade status (only ff*, i*, i)
+            if (isset($grade->gradeStatus) && in_array($grade->gradeStatus, ['ff*', 'i*', 'i'])) {
+                $gradeStatusCounts[$grade->gradeStatus]++;
+                $gradeStatusCounts['total']++;
+            }
+
+            // Add student to list
+            if ($grade->student) {
+                $students[] = [
+                    'name' => $grade->student->name,
+                    'code' => $grade->student->code,
+                    'totalGradeChar' => $grade->totalGradeChar ?? null,
+                    'gradeStatus' => $grade->gradeStatus ?? 'others'
+                ];
+            }
+        }
+
+        $students_total = count($students);
+
+        // Calculate pass/fail summary
+        $passed = $gradeCounts['A'] + $gradeCounts['B+'] + $gradeCounts['B'] + $gradeCounts['C+'] + $gradeCounts['C'];
+        $failed = $gradeCounts['F'] + $gradeStatusCounts['ff*'] + $gradeStatusCounts['i*'] + $gradeStatusCounts['i'];
+        $total = $passed + $failed;
+
+        // Helper to calculate percentage
+        $percent = function($count) use ($students_total) {
+            return $students_total > 0 ? round(($count / $students_total) * 100, 2) : 0.0;
+        };
+
+        // Build grade_counts with percentage
+        $gradeCountsWithPercent = [];
+        foreach (['A', 'B+', 'B', 'C+', 'C', 'F', 'total'] as $key) {
+            $gradeCountsWithPercent[$key] = [
+                'count' => $gradeCounts[$key],
+                'percentage' => $percent($gradeCounts[$key])
+            ];
+        }
+
+        // Build grade_status_counts with percentage
+        $gradeStatusCountsWithPercent = [];
+        foreach (['ff*', 'i*', 'i', 'total'] as $key) {
+            $gradeStatusCountsWithPercent[$key] = [
+                'count' => $gradeStatusCounts[$key],
+                'percentage' => $percent($gradeStatusCounts[$key])
+            ];
+        }
+
+        // Build pass_fail_summary with percentage
+        $passFailSummary = [
+            'passed' => [
+                'count' => $passed,
+                'percentage' => $percent($passed)
+            ],
+            'failed' => [
+                'count' => $failed,
+                'percentage' => $percent($failed)
+            ],
+            'total' => [
+                'count' => $total,
+                'percentage' => $percent($total)
+            ]
+        ];
+
+        return response()->json([
+            'students_total' => $students_total,
+            'grade_counts' => $gradeCountsWithPercent,
+            'grade_status_counts' => $gradeStatusCountsWithPercent,
+            'pass_fail_summary' => $passFailSummary,
+            'students' => $students
         ], 200);
     }
 }

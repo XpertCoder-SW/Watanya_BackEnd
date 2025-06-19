@@ -1402,52 +1402,6 @@
                 }
             }
         },
-        "/api/students/grade-statistics": {
-            "get": {
-                "tags": [
-                    "Statistics"
-                ],
-                "summary": "Get student grade statistics",
-                "description": "Returns statistics about students: total students, students with grades other than F, and students with F grades",
-                "operationId": "5b2e67334248dc800414147fa7a0fc30",
-                "responses": {
-                    "200": {
-                        "description": "Statistics retrieved successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "total_students": {
-                                            "type": "integer",
-                                            "example": 100
-                                        },
-                                        "passing_students": {
-                                            "type": "integer",
-                                            "example": 75
-                                        },
-                                        "failing_students": {
-                                            "type": "integer",
-                                            "example": 25
-                                        },
-                                        "passing_percentage": {
-                                            "type": "number",
-                                            "format": "float",
-                                            "example": 75
-                                        },
-                                        "failing_percentage": {
-                                            "type": "number",
-                                            "format": "float",
-                                            "example": 25
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/admin/students": {
             "get": {
                 "tags": [
@@ -3259,122 +3213,6 @@
                 }
             }
         },
-        "/api/subject/{subject_id}/statistics": {
-            "get": {
-                "tags": [
-                    "Subject"
-                ],
-                "summary": "Get statistics for a subject by ID",
-                "description": "Retrieve statistics for a subject including grade distribution, pass/fail counts, and student details.",
-                "operationId": "6aa7d5bd13263b9f909fd9944e565353",
-                "parameters": [
-                    {
-                        "name": "subject_id",
-                        "in": "path",
-                        "description": "ID of the subject",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Statistics retrieved successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "gradeDistribution": {
-                                            "properties": {
-                                                "A": {
-                                                    "type": "integer"
-                                                },
-                                                "B+": {
-                                                    "type": "integer"
-                                                },
-                                                "B": {
-                                                    "type": "integer"
-                                                },
-                                                "C+": {
-                                                    "type": "integer"
-                                                },
-                                                "C": {
-                                                    "type": "integer"
-                                                },
-                                                "F": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "passFailCounts": {
-                                            "properties": {
-                                                "pass": {
-                                                    "type": "integer"
-                                                },
-                                                "fail": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "specialGradeStatusCounts": {
-                                            "properties": {
-                                                "ff*": {
-                                                    "type": "integer"
-                                                },
-                                                "i*": {
-                                                    "type": "integer"
-                                                },
-                                                "i": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "students": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string"
-                                                    },
-                                                    "code": {
-                                                        "type": "string"
-                                                    },
-                                                    "totalGradeChar": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Subject not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Subject not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/student/{student_id}/details": {
             "get": {
                 "tags": [
@@ -3658,6 +3496,152 @@
                     }
                 }
             }
+        },
+        "/api/admin/subjects/{subject_id}/grade-statistics": {
+            "get": {
+                "tags": [
+                    "Admin Subjects"
+                ],
+                "summary": "Get grade statistics for a specific subject",
+                "description": "Returns comprehensive grade statistics including counts for each grade letter, grade status, and student details",
+                "operationId": "67467abc6b0c1ac28bd817c2a000c00c",
+                "parameters": [
+                    {
+                        "name": "subject_id",
+                        "in": "path",
+                        "description": "ID of the subject",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Grade statistics retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "grade_counts": {
+                                            "properties": {
+                                                "A": {
+                                                    "type": "integer",
+                                                    "example": 15
+                                                },
+                                                "B+": {
+                                                    "type": "integer",
+                                                    "example": 20
+                                                },
+                                                "B": {
+                                                    "type": "integer",
+                                                    "example": 25
+                                                },
+                                                "C+": {
+                                                    "type": "integer",
+                                                    "example": 18
+                                                },
+                                                "C": {
+                                                    "type": "integer",
+                                                    "example": 12
+                                                },
+                                                "F": {
+                                                    "type": "integer",
+                                                    "example": 8
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 98
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "grade_status_counts": {
+                                            "properties": {
+                                                "ff*": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "i*": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "i": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 98
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "pass_fail_summary": {
+                                            "properties": {
+                                                "passed": {
+                                                    "type": "integer",
+                                                    "example": 90
+                                                },
+                                                "failed": {
+                                                    "type": "integer",
+                                                    "example": 18
+                                                },
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 108
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "students": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Ahmed Mohamed"
+                                                    },
+                                                    "code": {
+                                                        "type": "string",
+                                                        "example": "2021001"
+                                                    },
+                                                    "totalGradeChar": {
+                                                        "type": "string",
+                                                        "example": "A"
+                                                    },
+                                                    "gradeStatus": {
+                                                        "type": "string",
+                                                        "example": "others"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subject not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subject not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [
@@ -3688,14 +3672,6 @@
         {
             "name": "Authentication",
             "description": "Authentication"
-        },
-        {
-            "name": "Statistics",
-            "description": "Statistics"
-        },
-        {
-            "name": "Subject",
-            "description": "Subject"
         }
     ]
 }
