@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -181,7 +182,13 @@ class AdminsController
             return response()->json(['message' => 'System setting not found'], 404);
         }
 
+        $oldAcademicYear = $admin->academic_year;
         $admin->update($request->only(['showGrades', 'academic_year', 'current_semester']));
+
+        // Update all students' academic_year if it was changed
+        if ($request->academic_year !== $oldAcademicYear) {
+            Student::query()->update(['academic_year' => $request->academic_year]);
+        }
 
         return response()->json([
             'data' => [
