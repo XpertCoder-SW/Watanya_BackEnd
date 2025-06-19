@@ -836,9 +836,21 @@ class GradesController
         }
         unset($sem);
 
+        // Calculate CGPA (Cumulative GPA)
+        $gpaSum = 0;
+        $gpaCount = 0;
+        foreach ($semesters as $sem) {
+            if (!empty($sem['subjects']) && $sem['gpa'] > 0) {
+                $gpaSum += $sem['gpa'];
+                $gpaCount++;
+            }
+        }
+        $cgpa = $gpaCount > 0 ? round($gpaSum / $gpaCount, 2) : 0;
+
         return response()->json([
             'student' => $student,
-            'semesters' => $semesters
+            'semesters' => $semesters,
+            'cgpa' => $cgpa
         ], 200);
     }
 }
