@@ -93,3 +93,4 @@ Route::get('/api/admin/students/{student_id}/examination-results', [StudentsCont
 
 
 Route::get('/admin/unassigned-subjects', [SubjectsController::class, 'getUnassignedSubjects']);
+Route::get('/student/{student_id}/full-record', [GradesController::class, 'studentFullAcademicRecord']);

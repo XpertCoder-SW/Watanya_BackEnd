@@ -692,4 +692,153 @@ class GradesController
         
         return $debug;
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/student/{student_id}/full-record",
+     *     tags={"Student"},
+     *     summary="Get full academic record for a student (semesters 1-8, subjects, grades, and GPA per semester)",
+     *     description="Returns the student's full academic record, grouped by semester number (1-8). Each semester contains a list of subjects with their gradeStatus and totalGradeChar, and the GPA for the semester.",
+     *     @OA\Parameter(
+     *         name="student_id",
+     *         in="path",
+     *         description="ID of the student",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Full academic record returned successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="student", type="object"),
+     *             @OA\Property(
+     *                 property="semesters",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="1",
+     *                     type="object",
+     *                     @OA\Property(property="level", type="integer", example=1),
+     *                     @OA\Property(
+     *                         property="subjects",
+     *                         type="array",
+     *                         @OA\Items(
+     *                             type="object",
+     *                             @OA\Property(property="subject_name", type="string"),
+     *                             @OA\Property(property="gradeStatus", type="string"),
+     *                             @OA\Property(property="totalGradeChar", type="string")
+     *                         )
+     *                     ),
+     *                     @OA\Property(property="gpa", type="number", format="float")
+     *                 ),
+     *                 @OA\Property(property="2", type="object", ref="#/components/schemas/SemesterRecord"),
+     *                 @OA\Property(property="3", type="object", ref="#/components/schemas/SemesterRecord"),
+     *                 @OA\Property(property="4", type="object", ref="#/components/schemas/SemesterRecord"),
+     *                 @OA\Property(property="5", type="object", ref="#/components/schemas/SemesterRecord"),
+     *                 @OA\Property(property="6", type="object", ref="#/components/schemas/SemesterRecord"),
+     *                 @OA\Property(property="7", type="object", ref="#/components/schemas/SemesterRecord"),
+     *                 @OA\Property(property="8", type="object", ref="#/components/schemas/SemesterRecord")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Student not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Student not found")
+     *         )
+     *     )
+     * )
+     *
+     * @OA\Schema(
+     *     schema="SemesterRecord",
+     *     type="object",
+     *     @OA\Property(property="level", type="integer", example=1),
+     *     @OA\Property(
+     *         property="subjects",
+     *         type="array",
+     *         @OA\Items(
+     *             type="object",
+     *             @OA\Property(property="subject_name", type="string"),
+     *             @OA\Property(property="gradeStatus", type="string"),
+     *             @OA\Property(property="totalGradeChar", type="string")
+     *         )
+     *     ),
+     *     @OA\Property(property="gpa", type="number", format="float")
+     * )
+     */
+    public function studentFullAcademicRecord($student_id)
+    {
+        $student = Student::find($student_id);
+        if (!$student) {
+            return response()->json([
+                'message' => 'Student not found'
+            ], 404);
+        }
+
+        // Get all grades for the student
+        $grades = Grade::where('student_id', $student_id)->get();
+        if ($grades->isEmpty()) {
+            return response()->json([
+                'student' => $student,
+                'semesters' => []
+            ], 200);
+        }
+
+        // Build semesters 1-8
+        $semesters = [];
+        for ($i = 1; $i <= 8; $i++) {
+            $level = intval(ceil($i / 2));
+            $semesters[$i] = [
+                'level' => $level,
+                'subjects' => [],
+                'gpa' => 0
+            ];
+        }
+
+        // Get all subjects with their level and semester
+        $subjects = Subject::all();
+        // Map: [subject_id => semester_number]
+        $subjectSemesterMap = [];
+        foreach ($subjects as $subject) {
+            $levelNum = match($subject->level) {
+                'One' => 1,
+                'Two' => 2,
+                'Three' => 3,
+                'Four' => 4,
+                default => 1
+            };
+            $semesterNum = $subject->semester === 'One' ? 1 : 2;
+            $semesterIndex = ($levelNum - 1) * 2 + $semesterNum; // 1-8
+            $subjectSemesterMap[$subject->id] = [
+                'semester_index' => $semesterIndex,
+                'level' => $levelNum
+            ];
+        }
+
+        // Group grades by semester
+        foreach ($grades as $grade) {
+            if (!isset($subjectSemesterMap[$grade->subject_id])) continue;
+            $semesterIndex = $subjectSemesterMap[$grade->subject_id]['semester_index'];
+            $subject = $subjects->find($grade->subject_id);
+            $semesters[$semesterIndex]['subjects'][] = [
+                'subject_name' => $subject ? $subject->name : null,
+                'gradeStatus' => $grade->gradeStatus,
+                'totalGradeChar' => $grade->totalGradeChar
+            ];
+        }
+
+        // Calculate GPA for each semester
+        foreach ($semesters as $i => &$sem) {
+            // Get grades for this semester
+            $semesterSubjectIds = array_keys(array_filter($subjectSemesterMap, fn($v) => $v['semester_index'] === $i));
+            $gradesInSemester = $grades->whereIn('subject_id', $semesterSubjectIds);
+            $sem['gpa'] = $this->calculateGpa($gradesInSemester);
+        }
+        unset($sem);
+
+        return response()->json([
+            'student' => $student,
+            'semesters' => $semesters
+        ], 200);
+    }
 }

@@ -1402,6 +1402,116 @@
                 }
             }
         },
+        "/api/student/{student_id}/full-record": {
+            "get": {
+                "tags": [
+                    "Student"
+                ],
+                "summary": "Get full academic record for a student (semesters 1-8, subjects, grades, and GPA per semester)",
+                "description": "Returns the student's full academic record, grouped by semester number (1-8). Each semester contains a list of subjects with their gradeStatus and totalGradeChar, and the GPA for the semester.",
+                "operationId": "1a26590dd474ca4786810eb243e6fe7c",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Full academic record returned successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "student": {
+                                            "type": "object"
+                                        },
+                                        "semesters": {
+                                            "properties": {
+                                                "1": {
+                                                    "properties": {
+                                                        "level": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "subjects": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "properties": {
+                                                                    "subject_name": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "gradeStatus": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "totalGradeChar": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "gpa": {
+                                                            "type": "number",
+                                                            "format": "float"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "2": {
+                                                    "$ref": "#/components/schemas/SemesterRecord"
+                                                },
+                                                "3": {
+                                                    "$ref": "#/components/schemas/SemesterRecord"
+                                                },
+                                                "4": {
+                                                    "$ref": "#/components/schemas/SemesterRecord"
+                                                },
+                                                "5": {
+                                                    "$ref": "#/components/schemas/SemesterRecord"
+                                                },
+                                                "6": {
+                                                    "$ref": "#/components/schemas/SemesterRecord"
+                                                },
+                                                "7": {
+                                                    "$ref": "#/components/schemas/SemesterRecord"
+                                                },
+                                                "8": {
+                                                    "$ref": "#/components/schemas/SemesterRecord"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/admin/students": {
             "get": {
                 "tags": [
@@ -3523,6 +3633,10 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "students_total": {
+                                            "type": "integer",
+                                            "example": 98
+                                        },
                                         "grade_counts": {
                                             "properties": {
                                                 "A": {
@@ -3641,6 +3755,40 @@
                         }
                     }
                 }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "SemesterRecord": {
+                "properties": {
+                    "level": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "subjects": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "subject_name": {
+                                    "type": "string"
+                                },
+                                "gradeStatus": {
+                                    "type": "string"
+                                },
+                                "totalGradeChar": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "gpa": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                },
+                "type": "object"
             }
         }
     },
