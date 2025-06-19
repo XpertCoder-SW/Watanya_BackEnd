@@ -1294,6 +1294,118 @@
                 }
             }
         },
+        "/api/student/{student_id}/grades/{subject_id}/status": {
+            "put": {
+                "tags": [
+                    "Doctor Student"
+                ],
+                "summary": "Update grade status for a student subject",
+                "description": "Update the grade status (pass/fail/incomplete) for a specific student and subject",
+                "operationId": "25a2971fed952386ae2dab642ec66e92",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "subject_id",
+                        "in": "path",
+                        "description": "ID of the subject",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "gradeStatus"
+                                ],
+                                "properties": {
+                                    "gradeStatus": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pass",
+                                            "i",
+                                            "i*",
+                                            "ff*",
+                                            "others"
+                                        ],
+                                        "example": "others"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Grade status updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grade status updated successfully"
+                                        },
+                                        "grade": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Grade not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Grade not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/student/{student_id}/grades-gpa": {
             "get": {
                 "tags": [
@@ -1374,6 +1486,71 @@
                                             "format": "float"
                                         },
                                         "cgpa": {
+                                            "type": "number",
+                                            "format": "float"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/student/{student_id}/grades-gpa-debug": {
+            "get": {
+                "tags": [
+                    "Student"
+                ],
+                "summary": "Debug GPA calculation for a student",
+                "description": "Returns detailed breakdown of GPA and CGPA calculations including all grades, points, and calculations",
+                "operationId": "9e140d02685768e2ba5a8e1e8266fffe",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "path",
+                        "description": "ID of the student",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Debug information retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "current_semester_debug": {
+                                            "type": "object"
+                                        },
+                                        "all_grades_debug": {
+                                            "type": "object"
+                                        },
+                                        "current_semester_gpa": {
+                                            "type": "number",
+                                            "format": "float"
+                                        },
+                                        "all_grades_cgpa": {
                                             "type": "number",
                                             "format": "float"
                                         }

@@ -228,8 +228,7 @@ class GradesController
         if ($totalGrade >= 75) return 'B+';
         if ($totalGrade >= 65) return 'B';
         if ($totalGrade >= 60) return 'C+';
-        if ($totalGrade >= 50) return
-     'C';
+        if ($totalGrade >= 50) return 'C';
         return 'F';
     }
 
@@ -524,51 +523,33 @@ class GradesController
             $subjectIds = Subject::where('semester', $currentSemester)->pluck('id')->toArray();
         }
 
-        $grades = Grade::where('student_id', $student_id)
+        // Get current semester grades for GPA calculation
+        $currentGrades = Grade::where('student_id', $student_id)
             ->where('academic_year', $currentAcademicYear)
             ->when($currentSemester !== null, function($query) use ($subjectIds) {
                 return $query->whereIn('subject_id', $subjectIds);
             })
             ->get();
 
-        if ($grades->isEmpty()) {
+        // Get all grades for CGPA calculation (all semesters and academic years)
+        $allGrades = Grade::where('student_id', $student_id)->get();
+
+        if ($currentGrades->isEmpty()) {
             return response()->json([
                 'grades' => [],
                 'gpa' => 0,
-                'cgpa' => 0
+                'cgpa' => $this->calculateGpa($allGrades)
             ], 200);
         }
 
-        // GPA/CGPA calculation formula
-        $calculateGpa = function($gradesCollection) {
-            $totalPoints = 0;
-            $totalCredits = 0;
-
-            foreach ($gradesCollection as $grade) {
-                $subject = Subject::find($grade->subject_id);
-                if (!$subject || !$subject->creditHours) continue;
-
-                $points = match($grade->totalGradeChar) {
-                    'A' => 4.0,
-                    'B+' => 3.5,
-                    'B' => 3.0,
-                    'C+' => 2.5,
-                    'C' => 2.0,
-                    default => 0.0,
-                };
-
-                $totalPoints += $points * $subject->creditHours;
-                $totalCredits += $subject->creditHours;
-            }
-
-            return $totalCredits > 0 ? round($totalPoints / $totalCredits, 2) : 0;
-        };
-
-        $gpa = $calculateGpa($grades);
-        $cgpa = $gpa;
+        // Calculate GPA for current semester
+        $gpa = $this->calculateGpa($currentGrades);
+        
+        // Calculate CGPA from all grades
+        $cgpa = $this->calculateGpa($allGrades);
 
         // Prepare grades with subject name and credit hours
-        $gradesWithSubject = $grades->map(function($grade) use ($currentSemester) {
+        $gradesWithSubject = $currentGrades->map(function($grade) use ($currentSemester) {
             $subject = Subject::find($grade->subject_id);
             return [
                 'id' => $grade->id,
@@ -589,8 +570,126 @@ class GradesController
 
         return response()->json([
             'grades' => $gradesWithSubject,
-            'gpa' => $gpa,
-            'cgpa' => $cgpa
+            'gpa' => (float) $gpa,
+            'cgpa' => (float) $cgpa
         ], 200);
+    }
+
+    /**
+     * Calculate GPA from a collection of grades
+     *
+     * @param \Illuminate\Support\Collection $gradesCollection
+     * @return float
+     */
+    private function calculateGpa($gradesCollection)
+    {
+        $totalPoints = 0;
+        $totalCredits = 0;
+
+        foreach ($gradesCollection as $grade) {
+            $subject = Subject::find($grade->subject_id);
+            if (!$subject || !$subject->creditHours) continue;
+
+            // Include all grades in GPA calculation (ff*, i, i*, others)
+            // All these statuses represent completed courses (pass or fail)
+            $points = $this->getGradePoints($grade->totalGradeChar);
+            $totalPoints += $points * $subject->creditHours;
+            $totalCredits += $subject->creditHours;
+        }
+
+        return $totalCredits > 0 ? round($totalPoints / $totalCredits, 2) : 0;
+    }
+
+    /**
+     * Get grade points for letter grade
+     * Standard 4.0 GPA scale used in most universities
+     *
+     * @param string $gradeChar
+     * @return float
+     */
+    private function getGradePoints($gradeChar)
+    {
+        return match($gradeChar) {
+            'A' => 4.0,
+            'B+' => 3.5,
+            'B' => 3.0,
+            'C+' => 2.5,
+            'C' => 2.0,
+            'F' => 0.0,
+            default => 0.0,
+        };
+    }
+
+    /**
+     * Calculate CGPA for a specific academic period
+     *
+     * @param int $student_id
+     * @param string|null $fromYear
+     * @param string|null $toYear
+     * @return float
+     */
+    private function calculateCgpaForPeriod($student_id, $fromYear = null, $toYear = null)
+    {
+        $query = Grade::where('student_id', $student_id);
+        
+        if ($fromYear) {
+            $query->where('academic_year', '>=', $fromYear);
+        }
+        
+        if ($toYear) {
+            $query->where('academic_year', '<=', $toYear);
+        }
+        
+        $grades = $query->get();
+        
+        return $this->calculateGpa($grades);
+    }
+
+    /**
+     * Debug function to check grade calculations
+     *
+     * @param \Illuminate\Support\Collection $gradesCollection
+     * @return array
+     */
+    private function debugGradeCalculation($gradesCollection)
+    {
+        $debug = [
+            'total_grades' => $gradesCollection->count(),
+            'processed_grades' => 0,
+            'skipped_grades' => 0,
+            'total_points' => 0,
+            'total_credits' => 0,
+            'grade_details' => []
+        ];
+
+        foreach ($gradesCollection as $grade) {
+            $subject = Subject::find($grade->subject_id);
+            
+            if (!$subject || !$subject->creditHours) {
+                $debug['skipped_grades']++;
+                continue;
+            }
+
+            // Include all grades in GPA calculation (ff*, i, i*, others)
+            // All these statuses represent completed courses (pass or fail)
+            $points = $this->getGradePoints($grade->totalGradeChar);
+            $debug['total_points'] += $points * $subject->creditHours;
+            $debug['total_credits'] += $subject->creditHours;
+            $debug['processed_grades']++;
+
+            $debug['grade_details'][] = [
+                'subject_name' => $subject->name,
+                'credit_hours' => $subject->creditHours,
+                'total_grade' => $grade->totalGrade,
+                'grade_char' => $grade->totalGradeChar,
+                'grade_status' => $grade->gradeStatus,
+                'points' => $points,
+                'contribution' => $points * $subject->creditHours
+            ];
+        }
+
+        $debug['final_gpa'] = $debug['total_credits'] > 0 ? round($debug['total_points'] / $debug['total_credits'], 2) : 0;
+        
+        return $debug;
     }
 }
