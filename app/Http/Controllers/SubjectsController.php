@@ -1273,7 +1273,20 @@ public function getAssignedStudents(Request $request, $doctor_id)
             ]
         ];
 
+        // Subject data
+        $subjectData = [
+            'id' => $subject->id,
+            'code' => $subject->code,
+            'name' => $subject->name,
+            'creditHours' => $subject->creditHours,
+            'specialization' => $subject->specialization,
+            'level' => $subject->level,
+            'semester' => $subject->semester,
+            'academic_year' => Grade::where('subject_id', $subject_id)->whereNotNull('academic_year')->orderByDesc('academic_year')->value('academic_year')
+        ];
+
         return response()->json([
+            'subject' => $subjectData,
             'students_total' => $students_total,
             'grade_counts' => $gradeCountsWithPercent,
             'grade_status_counts' => $gradeStatusCountsWithPercent,
