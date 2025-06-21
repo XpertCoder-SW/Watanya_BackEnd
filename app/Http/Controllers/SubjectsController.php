@@ -687,6 +687,16 @@ public function getDoctorSubjects(Request $request, $doctor_id)
  *         )
  *     ),
  *     @OA\Parameter(
+ *         name="specialization",
+ *         in="query",
+ *         description="Filter by specialization (CS, IT)",
+ *         required=false,
+ *         @OA\Schema(
+ *             type="string",
+ *             enum={"CS", "IT"}
+ *         )
+ *     ),
+ *     @OA\Parameter(
  *         name="page",
  *         in="query",
  *         description="Page number for students",
@@ -704,6 +714,13 @@ public function getDoctorSubjects(Request $request, $doctor_id)
  *         name="subject_name",
  *         in="query",
  *         description="Filter by subject name",
+ *         required=false,
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\Parameter(
+ *         name="student_code",
+ *         in="query",
+ *         description="Search by student code",
  *         required=false,
  *         @OA\Schema(type="string")
  *     ),
@@ -782,6 +799,11 @@ public function getAssignedStudents(Request $request, $doctor_id)
     ->where('semester', $currentSemester)
     ->where('level', $level);
 
+    // Apply filter by specialization
+    if ($request->has('specialization') && in_array($request->specialization, ['CS', 'IT'])) {
+        $subjectsQuery->where('specialization', $request->specialization);
+    }
+
     // Apply filter by subject name
     if ($request->has('subject_name')) {
         $subjectName = $request->input('subject_name');
@@ -799,10 +821,17 @@ public function getAssignedStudents(Request $request, $doctor_id)
     
     foreach ($subjects as $subject) {
         // Get students whose level matches the subject's level
-        $students = \App\Models\Student::where('level', $subject->level)
+        $studentsQuery = \App\Models\Student::where('level', $subject->level)
             ->where('specialization', $subject->specialization)
-            ->select('id', 'code', 'name', 'email', 'phoneNumber', 'level', 'specialization', 'academic_year', 'gpa')
-            ->get();
+            ->select('id', 'code', 'name', 'email', 'phoneNumber', 'level', 'specialization', 'academic_year', 'gpa');
+
+        // Apply search by student code
+        if ($request->has('student_code')) {
+            $studentCode = $request->input('student_code');
+            $studentsQuery->where('code', 'LIKE', "%{$studentCode}%");
+        }
+
+        $students = $studentsQuery->get();
 
         // Attach grades for each student in this subject
         $studentsWithGrades = $students->map(function($student) use ($subject) {

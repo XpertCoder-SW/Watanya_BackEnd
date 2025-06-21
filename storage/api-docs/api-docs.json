@@ -3153,6 +3153,19 @@
                         }
                     },
                     {
+                        "name": "specialization",
+                        "in": "query",
+                        "description": "Filter by specialization (CS, IT)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "CS",
+                                "IT"
+                            ]
+                        }
+                    },
+                    {
                         "name": "page",
                         "in": "query",
                         "description": "Page number for students",
@@ -3176,6 +3189,15 @@
                         "name": "subject_name",
                         "in": "query",
                         "description": "Filter by subject name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "student_code",
+                        "in": "query",
+                        "description": "Search by student code",
                         "required": false,
                         "schema": {
                             "type": "string"
