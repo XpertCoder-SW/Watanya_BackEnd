@@ -3171,6 +3171,15 @@
                             "type": "integer",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "subject_name",
+                        "in": "query",
+                        "description": "Filter by subject name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {

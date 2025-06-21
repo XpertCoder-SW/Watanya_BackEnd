@@ -700,6 +700,13 @@ public function getDoctorSubjects(Request $request, $doctor_id)
  *         required=false,
  *         @OA\Schema(type="integer", default=10)
  *     ),
+ *     @OA\Parameter(
+ *         name="subject_name",
+ *         in="query",
+ *         description="Filter by subject name",
+ *         required=false,
+ *         @OA\Schema(type="string")
+ *     ),
  *     @OA\Response(
  *         response=200,
  *         description="List of students grouped by subject",
@@ -769,12 +776,19 @@ public function getAssignedStudents(Request $request, $doctor_id)
     $level = $request->input('level');
 
     // Get subjects assigned to the doctor, filter by current semester and level
-    $subjects = \App\Models\Subject::whereHas('doctors', function($q) use ($doctor_id) {
+    $subjectsQuery = \App\Models\Subject::whereHas('doctors', function($q) use ($doctor_id) {
         $q->where('doctor_id', $doctor_id);
     })
     ->where('semester', $currentSemester)
-    ->where('level', $level)
-    ->get();
+    ->where('level', $level);
+
+    // Apply filter by subject name
+    if ($request->has('subject_name')) {
+        $subjectName = $request->input('subject_name');
+        $subjectsQuery->where('name', 'LIKE', "%{$subjectName}%");
+    }
+
+    $subjects = $subjectsQuery->get();
 
     if ($subjects->isEmpty()) {
         return response()->json(['message' => 'No subjects assigned to this doctor for the current semester and level or doctor not found'], 404);
