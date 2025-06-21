@@ -663,7 +663,7 @@ public function getDoctorSubjects(Request $request, $doctor_id)
         ], 200);
     }
 
-    /**
+/**
  * @OA\Get(
  *     path="/api/doctor/{doctor_id}/assigned-students",
  *     tags={"Doctor Student"},
@@ -677,42 +677,28 @@ public function getDoctorSubjects(Request $request, $doctor_id)
  *         @OA\Schema(type="integer")
  *     ),
  *     @OA\Parameter(
+ *         name="level",
+ *         in="query",
+ *         description="Filter by level (One, Two, Three, Four)",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="string",
+ *             enum={"One", "Two", "Three", "Four"}
+ *         )
+ *     ),
+ *     @OA\Parameter(
  *         name="page",
- *         in="query",
- *         description="Page number for subjects",
- *         required=false,
- *         @OA\Schema(type="integer", default=1)
- *     ),
- *     @OA\Parameter(
- *         name="per_page",
- *         in="query",
- *         description="Items per page for subjects",
- *         required=false,
- *         @OA\Schema(type="integer", default=10)
- *     ),
- *     @OA\Parameter(
- *         name="student_page",
  *         in="query",
  *         description="Page number for students",
  *         required=false,
  *         @OA\Schema(type="integer", default=1)
  *     ),
  *     @OA\Parameter(
- *         name="student_per_page",
+ *         name="per_page",
  *         in="query",
  *         description="Items per page for students",
  *         required=false,
  *         @OA\Schema(type="integer", default=10)
- *     ),
- *     @OA\Parameter(
- *         name="level",
- *         in="query",
- *         description="Filter by level (One, Two, Three, Four)",
- *         required=false,
- *         @OA\Schema(
- *             type="string",
- *             enum={"One", "Two", "Three", "Four"}
- *         )
  *     ),
  *     @OA\Response(
  *         response=200,
@@ -722,10 +708,6 @@ public function getDoctorSubjects(Request $request, $doctor_id)
  *             @OA\Property(property="per_page", type="integer", example=10),
  *             @OA\Property(property="total_pages", type="integer", example=5),
  *             @OA\Property(property="total_items", type="integer", example=50),
- *             @OA\Property(property="student_current_page", type="integer", example=1),
- *             @OA\Property(property="student_per_page", type="integer", example=10),
- *             @OA\Property(property="student_total_pages", type="integer", example=3),
- *             @OA\Property(property="student_total_items", type="integer", example=25),
  *             @OA\Property(
  *                 property="subjects",
  *                 type="array",
@@ -760,6 +742,13 @@ public function getDoctorSubjects(Request $request, $doctor_id)
  *         )
  *     ),
  *     @OA\Response(
+ *         response=400,
+ *         description="Level parameter is required",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Level parameter is required")
+ *         )
+ *     ),
+ *     @OA\Response(
  *         response=404,
  *         description="No subjects assigned to this doctor or doctor not found"
  *     )
@@ -767,41 +756,42 @@ public function getDoctorSubjects(Request $request, $doctor_id)
  */
 public function getAssignedStudents(Request $request, $doctor_id)
 {
+    // Validate that level parameter is required
+    if (!$request->has('level') || !in_array($request->level, ['One', 'Two', 'Three', 'Four'])) {
+        return response()->json(['message' => 'Level parameter is required and must be One, Two, Three, or Four'], 400);
+    }
+
     // Get the current semester from the Admin table
     $currentSemester = \App\Models\Admin::value('current_semester');
 
     $perPage = $request->input('per_page', 10);
     $page = $request->input('page', 1);
-    $studentPerPage = $request->input('student_per_page', 10);
-    $studentPage = $request->input('student_page', 1);
+    $level = $request->input('level');
 
-    // Get subjects assigned to the doctor and filter by current semester with pagination
+    // Get subjects assigned to the doctor, filter by current semester and level
     $subjects = \App\Models\Subject::whereHas('doctors', function($q) use ($doctor_id) {
         $q->where('doctor_id', $doctor_id);
     })
-    ->where('semester', $currentSemester);
-
-    // Apply level filter if provided
-    if ($request->has('level') && in_array($request->level, ['One', 'Two', 'Three', 'Four'])) {
-        $subjects->where('level', $request->level);
-    }
-
-    $subjects = $subjects->paginate($perPage, ['*'], 'page', $page);
+    ->where('semester', $currentSemester)
+    ->where('level', $level)
+    ->get();
 
     if ($subjects->isEmpty()) {
-        return response()->json(['message' => 'No subjects assigned to this doctor for the current semester or doctor not found'], 404);
+        return response()->json(['message' => 'No subjects assigned to this doctor for the current semester and level or doctor not found'], 404);
     }
 
-    $result = collect($subjects->items())->map(function($subject) use ($studentPerPage, $studentPage) {
-        // Get students whose level matches the subject's level with pagination
-        $studentsQuery = \App\Models\Student::where('level', $subject->level)
+    // Collect all students from all subjects
+    $allStudents = collect();
+    
+    foreach ($subjects as $subject) {
+        // Get students whose level matches the subject's level
+        $students = \App\Models\Student::where('level', $subject->level)
             ->where('specialization', $subject->specialization)
-            ->select('id', 'code', 'name', 'email', 'phoneNumber', 'level', 'specialization', 'academic_year', 'gpa');
-
-        $students = $studentsQuery->paginate($studentPerPage, ['*'], 'page', $studentPage);
+            ->select('id', 'code', 'name', 'email', 'phoneNumber', 'level', 'specialization', 'academic_year', 'gpa')
+            ->get();
 
         // Attach grades for each student in this subject
-        $studentsWithGrades = collect($students->items())->map(function($student) use ($subject) {
+        $studentsWithGrades = $students->map(function($student) use ($subject) {
             $grade = DB::table('grades')
                 ->where('student_id', $student->id)
                 ->where('subject_id', $subject->id)
@@ -810,6 +800,8 @@ public function getAssignedStudents(Request $request, $doctor_id)
             return array_merge(
                 $student->toArray(),
                 [
+                    'subject_id' => $subject->id,
+                    'subject_name' => $subject->name,
                     'gradeStatus' => $grade->gradeStatus ?? null,
                     'yearsWorkGrade' => $grade->yearsWorkGrade ?? null,
                     'midtermGrade' => $grade->midtermGrade ?? null,
@@ -818,29 +810,42 @@ public function getAssignedStudents(Request $request, $doctor_id)
                     'totalGrade' => $grade->totalGrade ?? null,
                 ]
             );
-        })->values()->all();
+        });
 
+        $allStudents = $allStudents->merge($studentsWithGrades);
+    }
+
+    // Remove duplicates based on student ID and subject ID combination
+    $allStudents = $allStudents->unique(function ($item) {
+        return $item['id'] . '-' . $item['subject_id'];
+    })->values();
+
+    // Apply pagination to all students
+    $totalStudents = $allStudents->count();
+    $totalPages = ceil($totalStudents / $perPage);
+    $offset = ($page - 1) * $perPage;
+    
+    $paginatedStudents = $allStudents->slice($offset, $perPage);
+
+    // Group students by subject for the response
+    $groupedStudents = $paginatedStudents->groupBy('subject_id')->map(function ($students, $subjectId) {
+        $firstStudent = $students->first();
         return [
-            'subject_id' => $subject->id,
-            'subject_name' => $subject->name,
-            'students' => $studentsWithGrades,
-            'student_pagination' => [
-                'current_page' => $students->currentPage(),
-                'per_page' => $students->perPage(),
-                'total_pages' => $students->lastPage(),
-                'total_items' => $students->total(),
-            ]
+            'subject_id' => $subjectId,
+            'subject_name' => $firstStudent['subject_name'],
+            'students' => $students->map(function ($student) {
+                return collect($student)->except(['subject_id', 'subject_name'])->all();
+            })->values()->all()
         ];
     })->values()->all();
 
     return response()->json([
-        'current_page' => $subjects->currentPage(),
-        'per_page' => $subjects->perPage(),
-        'total_pages' => $subjects->lastPage(),
-        'total_items' => $subjects->total(),
-        'student_current_page' => $studentPage,
-        'student_per_page' => $studentPerPage,
-        'subjects' => $result
+        'current_page' => $page,
+        'per_page' => $perPage,
+        'total_pages' => $totalPages,
+        'total_items' => $totalStudents,
+        'level' => $level,
+        'subjects' => $groupedStudents
     ], 200);
 }
 
